@@ -1,0 +1,26 @@
+type file
+version 1.0.0
+
+id Be.Vlaanderen.Basisregisters.Build.Pipeline
+title Be.Vlaanderen.Basisregisters.Build.Pipeline
+
+authors Basisregisters Vlaanderen
+owners agentschap Informatie Vlaanderen <https://vlaanderen.be/informatie-vlaanderen>
+copyright Copyright (c) agentschap Informatie Vlaanderen
+requireLicenseAcceptance false
+projectUrl https://github.com/Informatievlaanderen/build-pipeline
+iconUrl https://raw.githubusercontent.com/Informatievlaanderen/build-pipeline/master/logo.png
+licenseUrl https://opensource.org/licenses/MIT
+
+description Contains generic files for Basisregisters Vlaanderen pipelines.
+
+files
+  generic\build-generic.fsx => Content
+  generic\ci-myget.js => Content
+  generic\ci-md2conf.py => Content
+  generic\ci-confluence.sh => Content
+  generic\ci-bitbucket.sh => Content
+  generic\ci-docker-login.sh => Content
+  generic\build.sh => Content
+  generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props => Content
+  generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props => Content

@@ -1,0 +1,25 @@
+image:
+  name: basisregisters/build-agent:latest
+
+pipelines:
+  branches:
+    master:
+      - step:
+          caches:
+            - paket
+            - node
+          script:
+            - npm install
+            - npx semantic-release
+
+    '**':
+      - step:
+          caches:
+            - paket
+            - node
+          script:
+            - ./build.sh
+
+definitions:
+  caches:
+    paket: packages
