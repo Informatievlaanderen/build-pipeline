@@ -1,5 +1,5 @@
 {
-  "name": "Be.Vlaanderen.Basisregisters.Build.Pipeline",
+  "name": "build-pipeline",
   "version": "1.0.0",
   "description": "Contains generic files for Basisregisters Vlaanderen pipelines.",
   "author": "Basisregisters Vlaanderen",
