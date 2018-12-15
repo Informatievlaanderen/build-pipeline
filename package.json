@@ -1,6 +1,6 @@
 {
   "name": "Be.Vlaanderen.Basisregisters.Build.Pipeline",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Contains generic files for Basisregisters Vlaanderen pipelines.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",
