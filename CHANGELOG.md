@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.0...v1.1.1) (2018-12-18)
+
+
+### Bug Fixes
+
+* no need for nuget feed, it is always the root ([cb59148](https://github.com/Informatievlaanderen/build-pipeline/commit/cb59148))
+
 # [1.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.0.1...v1.1.0) (2018-12-18)
 
 
