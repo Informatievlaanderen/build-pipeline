@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.1...v1.1.2) (2018-12-18)
+
+
+### Bug Fixes
+
+* nuget now requires an extra header to be sent x-nuget-client-version ([a1c4a62](https://github.com/Informatievlaanderen/build-pipeline/commit/a1c4a62))
+
 ## [1.1.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.0...v1.1.1) (2018-12-18)
 
 
