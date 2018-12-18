@@ -27,6 +27,7 @@ function push (filepath, host, apiKey, callback) {
         method: 'PUT',
         headers: {
             'X-NuGet-ApiKey': apiKey,
+            'X-NuGet-Client-Version': '4.2.0',
             'user-agent': userAgent,
             'Accept-Language': 'en-US'
         }
