@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.0.1...v1.1.0) (2018-12-18)
+
+
+### Features
+
+* add test properties and nuget push script ([35f1ad6](https://github.com/Informatievlaanderen/build-pipeline/commit/35f1ad6))
+
 ## [1.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.0.0...v1.0.1) (2018-12-18)
 
 
