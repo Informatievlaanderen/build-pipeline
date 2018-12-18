@@ -141,11 +141,7 @@
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "node ci-myget.js dist/Be.Vlaanderen.Basisregisters.Build.Pipeline/Be.Vlaanderen.Basisregisters.Build.Pipeline.${nextRelease.version}.nupkg"
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "./ci-bitbucket.sh dist/Be.Vlaanderen.Basisregisters.Build.Pipeline/Be.Vlaanderen.Basisregisters.Build.Pipeline.${nextRelease.version}.nupkg"
+        "cmd": "node ci-nuget.js dist/Be.Vlaanderen.Basisregisters.Build.Pipeline/Be.Vlaanderen.Basisregisters.Build.Pipeline.${nextRelease.version}.nupkg"
       },
       {
         "path": "@semantic-release/exec",
