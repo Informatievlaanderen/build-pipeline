@@ -75,6 +75,25 @@ let determineInstalledSdkVersion () =
   printfn "Determined SDK Version: %s" sdkVersion
   sdkVersion
 
+let addVersionArguments version args =
+  [|
+    "/p:AssemblyVersion=%s"
+    "/p:FileVersion=%s"
+    "/p:InformationalVersion=%s"
+    "/p:PackageVersion=%s"
+  |]
+  |> Seq.map (fun parameterFormat -> sprintf (PrintfFormat<_,_,_,_> parameterFormat) version)
+  |> Seq.append args
+  |> Seq.toList
+
+let addRuntimeFrameworkVersion args =
+  let fxVersion = getDotNetClrVersionFromGlobalJson()
+  [|
+    (sprintf "/p:RuntimeFrameworkVersion=%s" fxVersion)
+  |]
+  |> Seq.append args
+  |> Seq.toList
+
 let testWithXunit path =
   let fxVersion = getDotNetClrVersionFromGlobalJson()
   DotNetCli.RunCommand
@@ -95,28 +114,9 @@ let testWithDotNet path =
         | None -> p.ToolPath
         | Some dotnetExePath -> dotnetExePath
       Project = path
-      AdditionalArgs = ["-l trx"; "--no-build"; "--no-restore"]
+      AdditionalArgs = ["-l trx"; "--no-build"; "--no-restore"] |> addRuntimeFrameworkVersion
    })
-
-let addVersionArguments version args =
-  [|
-    "/p:AssemblyVersion=%s"
-    "/p:FileVersion=%s"
-    "/p:InformationalVersion=%s"
-    "/p:PackageVersion=%s"
-  |]
-  |> Seq.map (fun parameterFormat -> sprintf (PrintfFormat<_,_,_,_> parameterFormat) version)
-  |> Seq.append args
-  |> Seq.toList
-
-let addRuntimeFrameworkVersion args =
-  let fxVersion = getDotNetClrVersionFromGlobalJson()
-  [|
-    (sprintf "/p:RuntimeFrameworkVersion=%s" fxVersion)
-  |]
-  |> Seq.append args
-  |> Seq.toList
-
+   
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
   { p with
