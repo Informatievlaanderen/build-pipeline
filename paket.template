@@ -17,6 +17,7 @@ description Contains generic files for Basisregisters Vlaanderen pipelines.
 files
   generic\build-generic.fsx => Content
   generic\ci-myget.js => Content
+  generic\ci-nuget.js => Content
   generic\ci-md2conf.py => Content
   generic\ci-confluence.sh => Content
   generic\ci-bitbucket.sh => Content
@@ -24,3 +25,4 @@ files
   generic\build.sh => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props => Content
+  generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props => Content
