@@ -126,6 +126,17 @@ let buildNeutral formatAssemblyVersion x =
         | Some dotnetExePath -> dotnetExePath
       Project = x
       Configuration = "Release"
+      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+  })
+
+  DotNetCli.Build(fun p ->
+  { p with
+      ToolPath =
+        match customDotnetExePath with
+        | None -> p.ToolPath
+        | Some dotnetExePath -> dotnetExePath
+      Project = x
+      Configuration = "Release"
       Runtime = "debian.8-x64"
       AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
   })
@@ -182,7 +193,7 @@ let publishSolution formatAssemblyVersion sln =
         match customDotnetExePath with
         | None -> p.ToolPath
         | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifiers=%s -p:PublishDir=%s %s %s"
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
       (sprintf "%s.sln" sln)
       "Release"
       "debian.8-x64"
@@ -209,7 +220,7 @@ let publishSolution formatAssemblyVersion sln =
         match customDotnetExePath with
         | None -> p.ToolPath
         | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifiers=%s -p:PublishDir=%s %s %s"
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
       (sprintf "%s.sln" sln)
       "Release"
       "win10-x64"
