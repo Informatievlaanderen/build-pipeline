@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.2...v1.1.3) (2018-12-19)
+
+
+### Bug Fixes
+
+* publish using only 1 cpu, slowing down but at least our CI server will not keep files locked ([071654b](https://github.com/Informatievlaanderen/build-pipeline/commit/071654b))
+
 ## [1.1.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.1...v1.1.2) (2018-12-18)
 
 
