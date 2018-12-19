@@ -77,10 +77,10 @@ let determineInstalledSdkVersion () =
 
 let addVersionArguments version args =
   [|
-    "/p:AssemblyVersion=%s"
-    "/p:FileVersion=%s"
-    "/p:InformationalVersion=%s"
-    "/p:PackageVersion=%s"
+    "-p:AssemblyVersion=%s"
+    "-p:FileVersion=%s"
+    "-p:InformationalVersion=%s"
+    "-p:PackageVersion=%s"
   |]
   |> Seq.map (fun parameterFormat -> sprintf (PrintfFormat<_,_,_,_> parameterFormat) version)
   |> Seq.append args
@@ -89,7 +89,7 @@ let addVersionArguments version args =
 let addRuntimeFrameworkVersion args =
   let fxVersion = getDotNetClrVersionFromGlobalJson()
   [|
-    (sprintf "/p:RuntimeFrameworkVersion=%s" fxVersion)
+    (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion)
   |]
   |> Seq.append args
   |> Seq.toList
@@ -116,7 +116,7 @@ let testWithDotNet path =
       Project = path
       AdditionalArgs = ["-l trx"; "--no-build"; "--no-restore"] |> addRuntimeFrameworkVersion
    })
-   
+
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
   { p with
@@ -126,6 +126,19 @@ let buildNeutral formatAssemblyVersion x =
         | Some dotnetExePath -> dotnetExePath
       Project = x
       Configuration = "Release"
+      Runtime = "debian.8-x64"
+      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+  })
+
+  DotNetCli.Build(fun p ->
+  { p with
+      ToolPath =
+        match customDotnetExePath with
+        | None -> p.ToolPath
+        | Some dotnetExePath -> dotnetExePath
+      Project = x
+      Configuration = "Release"
+      Runtime = "win10-x64"
       AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
   })
 
@@ -146,7 +159,7 @@ let publish formatAssemblyVersion project =
       Configuration = "Release"
       Output = buildDir @@ project @@ "linux"
       Runtime = "debian.8-x64"
-      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+      AdditionalArgs = ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
   })
 
   DotNetCli.Publish(fun p ->
@@ -159,35 +172,63 @@ let publish formatAssemblyVersion project =
       Configuration = "Release"
       Output = buildDir @@ project @@ "win"
       Runtime = "win10-x64"
-      AdditionalArgs =  ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+      AdditionalArgs =  ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
   })
 
 let publishSolution formatAssemblyVersion sln =
-  DotNetCli.Publish(fun p ->
+  DotNetCli.RunCommand(fun p ->
   { p with
       ToolPath =
         match customDotnetExePath with
         | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = (sprintf "%s.sln" sln)
-      Configuration = "Release"
-      Output = buildDir @@ sln @@ "linux"
-      Runtime = "debian.8-x64"
-      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+        | Some dotnetExePath -> dotnetExePath })
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifiers=%s -p:PublishDir=%s %s %s"
+      (sprintf "%s.sln" sln)
+      "Release"
+      "debian.8-x64"
+      (buildDir @@ sln @@ "linux")
+      (addRuntimeFrameworkVersion [] |> List.fold (+) " ")
+      (addVersionArguments (formatAssemblyVersion buildNumber) [] |> List.fold (+) " "))
 
-  DotNetCli.Publish(fun p ->
+  // DotNetCli.Publish(fun p ->
+  // { p with
+  //     ToolPath =
+  //       match customDotnetExePath with
+  //       | None -> p.ToolPath
+  //       | Some dotnetExePath -> dotnetExePath
+  //     Project = (sprintf "%s.sln" sln)
+  //     Configuration = "Release"
+  //     Output = buildDir @@ sln @@ "linux"
+  //     Runtime = "debian.8-x64"
+  //     AdditionalArgs = ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+  // })
+
+  DotNetCli.RunCommand(fun p ->
   { p with
       ToolPath =
         match customDotnetExePath with
         | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = (sprintf "%s.sln" sln)
-      Configuration = "Release"
-      Output = buildDir @@ sln @@ "win"
-      Runtime = "win10-x64"
-      AdditionalArgs =  ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+        | Some dotnetExePath -> dotnetExePath })
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifiers=%s -p:PublishDir=%s %s %s"
+      (sprintf "%s.sln" sln)
+      "Release"
+      "win10-x64"
+      (buildDir @@ sln @@ "win")
+      (addRuntimeFrameworkVersion [] |> List.fold (+) " ")
+      (addVersionArguments (formatAssemblyVersion buildNumber) [] |> List.fold (+) " "))
+
+  // DotNetCli.Publish(fun p ->
+  // { p with
+  //     ToolPath =
+  //       match customDotnetExePath with
+  //       | None -> p.ToolPath
+  //       | Some dotnetExePath -> dotnetExePath
+  //     Project = (sprintf "%s.sln" sln)
+  //     Configuration = "Release"
+  //     Output = buildDir @@ sln @@ "win"
+  //     Runtime = "win10-x64"
+  //     AdditionalArgs =  ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+  // })
 
 let containerize dockerRepository project containerName =
   let result1 =
