@@ -132,12 +132,7 @@
     "publish": [
       {
         "path": "@semantic-release/github",
-        "assets": [
-          {
-            "path": "dist/Be.Vlaanderen.Basisregisters.Build.Pipeline/*.nupkg",
-            "label": "NuGet Package"
-          }
-        ]
+        "assets": [{ "path": "dist/**/*.nupkg" } ]
       },
       {
         "path": "@semantic-release/exec",
