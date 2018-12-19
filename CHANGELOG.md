@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.3...v1.1.4) (2018-12-19)
+
+
+### Bug Fixes
+
+* build runtime neutral as well to make tests work ([e387312](https://github.com/Informatievlaanderen/build-pipeline/commit/e387312))
+
 ## [1.1.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.2...v1.1.3) (2018-12-19)
 
 
