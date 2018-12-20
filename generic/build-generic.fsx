@@ -193,7 +193,7 @@ let publishSolution formatAssemblyVersion sln =
         match customDotnetExePath with
         | None -> p.ToolPath
         | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:NoBuild=true -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
       (sprintf "%s.sln" sln)
       "Release"
       "debian.8-x64"
@@ -220,7 +220,7 @@ let publishSolution formatAssemblyVersion sln =
         match customDotnetExePath with
         | None -> p.ToolPath
         | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
+    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:NoBuild=true -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
       (sprintf "%s.sln" sln)
       "Release"
       "win10-x64"
