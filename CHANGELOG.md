@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.4...v1.1.5) (2018-12-20)
+
+
+### Bug Fixes
+
+* no need to run build again for a publish, we have built before ([2d3f926](https://github.com/Informatievlaanderen/build-pipeline/commit/2d3f926))
+
 ## [1.1.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.3...v1.1.4) (2018-12-19)
 
 
