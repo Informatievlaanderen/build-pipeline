@@ -117,6 +117,9 @@ let testWithDotNet path =
       AdditionalArgs = ["-l trx"; "--no-build"; "--no-restore"] |> addRuntimeFrameworkVersion
    })
 
+let test project =
+  testWithDotNet ("test" @@ project @@ (sprintf "%s.csproj" project))
+
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
   { p with
