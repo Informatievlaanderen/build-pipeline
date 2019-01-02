@@ -159,6 +159,9 @@ let buildNeutral formatAssemblyVersion x =
 let build formatAssemblyVersion project =
   buildNeutral formatAssemblyVersion ("src" @@ project @@ (sprintf "%s.csproj" project))
 
+let buildTest formatAssemblyVersion project =
+  buildNeutral formatAssemblyVersion ("test" @@ project @@ (sprintf "%s.csproj" project))
+
 let buildSolution formatAssemblyVersion sln =
   buildNeutral formatAssemblyVersion (sprintf "%s.sln" sln)
 
