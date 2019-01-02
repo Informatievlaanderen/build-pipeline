@@ -324,6 +324,18 @@ Target "DotNetCli" (fun _ ->
   printfn ".NET Core SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
 )
 
+let restore sln =
+  DotNetCli.Restore(fun p ->
+  {
+    p with
+      ToolPath =
+        match customDotnetExePath with
+        | None -> p.ToolPath
+        | Some dotnetExePath -> dotnetExePath
+      Project = (sprintf "%s.sln" sln)
+      AdditionalArgs = ["-r win10-x64"; "-r debian.8-x64" ] |> addRuntimeFrameworkVersion
+  })
+  
 Target "Restore" (fun _ ->
   DotNetCli.Restore(fun p ->
   {
