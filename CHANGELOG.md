@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.6...v1.2.0) (2019-01-02)
+
+
+### Features
+
+* add buildTest shorthand to build projects in the test folder ([502a438](https://github.com/Informatievlaanderen/build-pipeline/commit/502a438))
+
 ## [1.1.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.5...v1.1.6) (2018-12-30)
 
 ## [1.1.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.4...v1.1.5) (2018-12-20)
