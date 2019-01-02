@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.2.0...v1.3.0) (2019-01-02)
+
+
+### Features
+
+* add restore shorthand to restore for specific solutions ([58265b5](https://github.com/Informatievlaanderen/build-pipeline/commit/58265b5))
+
 # [1.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.1.6...v1.2.0) (2019-01-02)
 
 
