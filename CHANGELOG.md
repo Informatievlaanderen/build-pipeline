@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.3.0...v1.4.0) (2019-01-03)
+
+
+### Features
+
+* tag test projects to properly load Test Explorer in VS ([a718f06](https://github.com/Informatievlaanderen/build-pipeline/commit/a718f06))
+
 # [1.3.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.2.0...v1.3.0) (2019-01-02)
 
 
