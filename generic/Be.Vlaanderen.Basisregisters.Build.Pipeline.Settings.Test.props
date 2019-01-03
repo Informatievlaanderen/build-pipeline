@@ -29,4 +29,9 @@
     <!-- Disable Paket restore under NCrunch build -->
     <PaketRestoreDisabled Condition="'$(NCrunch)' == '1'">True</PaketRestoreDisabled>
   </PropertyGroup>
+  
+  <!-- https://stackoverflow.com/questions/18614342/what-is-service-include-in-a-csproj-file-for -->
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
 </Project>
