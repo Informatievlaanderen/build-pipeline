@@ -120,6 +120,8 @@ let testWithDotNet path =
 let test project =
   testWithDotNet ("test" @@ project @@ (sprintf "%s.csproj" project))
 
+let testSolution sln =
+  testWithDotNet (sprintf "%s.sln" sln)
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
   { p with
@@ -324,6 +326,8 @@ Target "DotNetCli" (fun _ ->
   printfn ".NET Core SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
 )
 
+Target "Clean" (fun _ -> CleanDir buildDir)
+
 let restore sln =
   DotNetCli.Restore(fun p ->
   {
@@ -335,7 +339,7 @@ let restore sln =
       Project = (sprintf "%s.sln" sln)
       AdditionalArgs = ["-r win10-x64"; "-r debian.8-x64" ] |> addRuntimeFrameworkVersion
   })
-  
+
 Target "Restore" (fun _ ->
   DotNetCli.Restore(fun p ->
   {
