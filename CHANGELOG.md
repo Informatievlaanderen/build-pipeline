@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.5.0...v1.6.0) (2019-04-25)
+
+
+### Features
+
+* bump to .net core 2.2.4 ([2922779](https://github.com/Informatievlaanderen/build-pipeline/commit/2922779))
+
 # [1.5.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.4.0...v1.5.0) (2019-01-08)
 
 
