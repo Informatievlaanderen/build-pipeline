@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <LangVersion>latest</LangVersion>
-    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
     <DisableImplicitFrameworkReferences>True</DisableImplicitFrameworkReferences>
 
     <EnableDefaultContentItems>false</EnableDefaultContentItems>

@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <LangVersion>latest</LangVersion>
-    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
     <DisableImplicitFrameworkReferences>True</DisableImplicitFrameworkReferences>
 
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
@@ -29,7 +29,7 @@
     <!-- Disable Paket restore under NCrunch build -->
     <PaketRestoreDisabled Condition="'$(NCrunch)' == '1'">True</PaketRestoreDisabled>
   </PropertyGroup>
-  
+
   <!-- https://stackoverflow.com/questions/18614342/what-is-service-include-in-a-csproj-file-for -->
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

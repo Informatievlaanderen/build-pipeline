@@ -122,6 +122,7 @@ let test project =
 
 let testSolution sln =
   testWithDotNet (sprintf "%s.sln" sln)
+
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
   { p with
