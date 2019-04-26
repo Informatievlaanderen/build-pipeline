@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.6.0...v1.6.1) (2019-04-26)
+
+
+### Bug Fixes
+
+* escape commit messages for changelog ([2801b8a](https://github.com/Informatievlaanderen/build-pipeline/commit/2801b8a))
+
 # [1.6.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.5.0...v1.6.0) (2019-04-25)
 
 
