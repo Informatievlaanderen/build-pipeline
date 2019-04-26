@@ -411,13 +411,15 @@ def main():
 	print 'Markdown file:\t%s' % markdownFile
 	print 'Space Key:\t%s' % spacekey
 
-	with open(markdownFile, 'r') as f:
-		mdContent = f.read()
-
 	print 'Title:\t\t%s' % title
 
 	with codecs.open(markdownFile,'r','utf-8') as f:
-		html=markdown.markdown(f.read(), extensions = ['markdown.extensions.tables', 'markdown.extensions.fenced_code'])
+		mdContent = f.read()
+		mdContent = mdContent.replace('&', '&amp;')
+		mdContent = mdContent.replace('"', '&quot;')
+		mdContent = mdContent.replace('<', '&lt;')
+		mdContent = mdContent.replace('>', '&gt;')
+		html = markdown.markdown(mdContent, extensions = ['markdown.extensions.tables', 'markdown.extensions.fenced_code'])
 
 	html = '\n'.join(html.split('\n')[1:])
 
