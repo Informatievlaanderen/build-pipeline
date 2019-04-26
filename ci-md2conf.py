@@ -235,7 +235,6 @@ def addContents(html):
   	contentsMarkup = contentsMarkup + '<ac:parameter ac:name="class">rm-contents</ac:parameter>\n<ac:parameter ac:name="exclude"></ac:parameter>\n<ac:parameter ac:name="type">list</ac:parameter>'
  	contentsMarkup = contentsMarkup + '<ac:parameter ac:name="outline">false</ac:parameter>\n<ac:parameter ac:name="include"></ac:parameter>\n</ac:structured-macro>'
 
-
  	html = contentsMarkup + '\n' + html
  	return html
 
@@ -401,7 +400,6 @@ def uploadAttachment(pageId, file, comment):
 
 	r = s.post(url, files=fileToUpload)
 	r.raise_for_status()
-
 
 def main():
 	print '\n\n\t\t----------------------------------'
