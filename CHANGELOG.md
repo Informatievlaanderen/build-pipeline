@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.6.1...v1.7.0) (2019-08-21)
+
+
+### Features
+
+* bump to .net 2.2.6 ([3cac7f3](https://github.com/Informatievlaanderen/build-pipeline/commit/3cac7f3))
+
 ## [1.6.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.6.0...v1.6.1) (2019-04-26)
 
 
