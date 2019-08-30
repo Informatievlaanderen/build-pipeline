@@ -6,11 +6,13 @@
 
 open Fake
 open Fake.NpmHelper
+open Fake.AssemblyInfoFile
 open System
 open System.IO
 open Newtonsoft.Json.Linq
 
-let buildNumber = environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0"
+let buildNumber = environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0.0.0"
+let gitHash = environVarOrDefault "BITBUCKET_COMMIT" ""
 let buildDir = environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 let dockerRegistry = environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
 
@@ -122,6 +124,15 @@ let test project =
 
 let testSolution sln =
   testWithDotNet (sprintf "%s.sln" sln)
+
+let setSolutionVersions formatAssemblyVersion product copyright company x =
+  CreateCSharpAssemblyInfo x
+      [Attribute.Version (formatAssemblyVersion buildNumber)
+       Attribute.FileVersion (formatAssemblyVersion buildNumber)
+       Attribute.InformationalVersion gitHash
+       Attribute.Product product
+       Attribute.Copyright copyright
+       Attribute.Company company]
 
 let buildNeutral formatAssemblyVersion x =
   DotNetCli.Build(fun p ->
