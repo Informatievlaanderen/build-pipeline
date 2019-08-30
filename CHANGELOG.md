@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.8.0...v1.9.0) (2019-08-30)
+
+
+### Features
+
+* support generating assemblyinfo ([70bdd2d](https://github.com/Informatievlaanderen/build-pipeline/commit/70bdd2d))
+
 # [1.8.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.7.0...v1.8.0) (2019-08-30)
 
 
