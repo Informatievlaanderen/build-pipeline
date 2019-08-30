@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.7.0...v1.8.0) (2019-08-30)
+
+
+### Features
+
+* do not generate assembly informational version automatically ([a6923d3](https://github.com/Informatievlaanderen/build-pipeline/commit/a6923d3))
+
 # [1.7.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.6.1...v1.7.0) (2019-08-21)
 
 
