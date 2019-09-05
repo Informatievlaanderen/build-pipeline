@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.10.0...v1.11.0) (2019-09-05)
+
+
+### Features
+
+* add github url to jira version ([d8c95b0](https://github.com/Informatievlaanderen/build-pipeline/commit/d8c95b0))
+
 # [1.10.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.9.0...v1.10.0) (2019-09-05)
 
 
