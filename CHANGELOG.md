@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.9.0...v1.10.0) (2019-09-05)
+
+
+### Features
+
+* add jira creation script ([acb5f17](https://github.com/Informatievlaanderen/build-pipeline/commit/acb5f17))
+
 # [1.9.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.8.0...v1.9.0) (2019-08-30)
 
 
