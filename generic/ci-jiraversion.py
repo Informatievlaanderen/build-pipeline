@@ -14,6 +14,8 @@ parser.add_argument('project', help="Jira project key for the page.")
 parser.add_argument('-u', '--username', help='Jira username if $JIRA_USERNAME not set.')
 parser.add_argument('-p', '--password', help='Jira password if $JIRA_PASSWORD not set.')
 parser.add_argument('-o', '--orgname', help='Jira organisation if $JIRA_ORGNAME not set. e.g. https://XXX.atlassian.net')
+parser.add_argument('-g', '--github', help='Use this option to provide a github url.')
+parser.add_argument('-r', '--repo', help='Use this option to provide a repository name.')
 parser.add_argument('-n', '--nossl', action='store_true', default=False, help='Use this option if NOT using SSL. Will use HTTP instead of HTTPS.')
 args = parser.parse_args()
 
@@ -24,6 +26,8 @@ try:
 	username = os.getenv('JIRA_USERNAME', args.username)
 	password = os.getenv('JIRA_PASSWORD', args.password)
 	orgname = os.getenv('JIRA_ORGNAME', args.orgname)
+	github = args.github
+	repo = args.repo
 	nossl = args.nossl
 
 	if version is None:
@@ -46,6 +50,14 @@ try:
 		print 'Error: Org Name not specified by environment variable or option.'
 		sys.exit(1)
 
+	if github is None:
+		print 'Error: Github not specified by option.'
+		sys.exit(1)
+
+	if repo is None:
+		print 'Error: Repository not specified by option.'
+		sys.exit(1)
+
 	projectUrl = 'https://%s.atlassian.net/' % orgname
 	if nossl:
 		projectUrl.replace('https://','http://')
@@ -60,6 +72,7 @@ def createVersion(versionToCreate, projectToUse):
 	print '\nCreating version...'
 
 	url = '%s/rest/api/2/version/' % projectUrl
+	description = 'Automatically created version at %s/releases/tag/v%s' % (github, versionToCreate)
 
 	s = requests.Session()
 	s.auth = (username, password)
@@ -68,7 +81,7 @@ def createVersion(versionToCreate, projectToUse):
 	newVersion = { 'archived' : 'false', \
 	 'project' : projectToUse, \
 	 'name' : versionToCreate, \
-	 'description' : 'Automatically created version on build.', \
+	 'description' : description, \
 	 'released' : 'false', \
 	 'releaseDate' : datetime.datetime.utcnow().isoformat() \
 	 }
@@ -96,7 +109,7 @@ def main():
 
 	createVersion(version, project)
 
-	print '\Jira Version Creator completed successfully.'
+	print '\nJira Version Creator completed successfully.'
 
 if __name__ == "__main__":
 	main()
