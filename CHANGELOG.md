@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.11.0...v1.11.1) (2019-09-05)
+
+
+### Bug Fixes
+
+* include jira scripts in nuget ([093c958](https://github.com/Informatievlaanderen/build-pipeline/commit/093c958))
+
 # [1.11.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.10.0...v1.11.0) (2019-09-05)
 
 
