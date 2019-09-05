@@ -22,6 +22,8 @@ files
   generic\ci-confluence.sh => Content
   generic\ci-bitbucket.sh => Content
   generic\ci-docker-login.sh => Content
+  generic\ci-jira.sh => Content
+  generic\ci-jiraversion.py => Content
   generic\build.sh => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props => Content
