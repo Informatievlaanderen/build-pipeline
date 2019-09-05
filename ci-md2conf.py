@@ -9,11 +9,11 @@
 # Usage: rest_md2conf.py markdown spacekey
 # --------------------------------------------------------------------------------------------------------
 
-import  sys, os
-import	markdown, mimetypes, codecs
-import	re, collections
-import	requests, json
-import	argparse, urllib, webbrowser
+import sys, os
+import markdown, mimetypes, codecs
+import re, collections
+import requests, json
+import argparse, urllib, webbrowser
 
 # ArgumentParser to parse arguments and options
 parser = argparse.ArgumentParser()
