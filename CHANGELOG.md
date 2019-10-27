@@ -1,3 +1,20 @@
+# [2.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.11.1...v2.0.0) (2019-10-27)
+
+
+### Bug Fixes
+
+* run correct fake target on build ([b2ed418](https://github.com/Informatievlaanderen/build-pipeline/commit/b2ed418))
+
+
+### Features
+
+* switch to fake 5 ([5c11f0d](https://github.com/Informatievlaanderen/build-pipeline/commit/5c11f0d))
+
+
+### BREAKING CHANGES
+
+* The generic build script has moved to Fake 5
+
 ## [1.11.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.11.0...v1.11.1) (2019-09-05)
 
 
