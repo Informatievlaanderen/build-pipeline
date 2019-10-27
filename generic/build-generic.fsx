@@ -207,7 +207,7 @@ let publishSolution formatAssemblyVersion sln =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir =
     { msbuild with
         MaxCpuCount = Some (Some 1)
-        Targets = ["Build"]
+        Targets = ["Publish"]
         Properties = [
           "NoBuild", "true"
           "SelfContained", "true"
@@ -268,6 +268,7 @@ let pack formatNugetVersion project =
   let nugetVersion = formatNugetVersion buildNumber
   Paket.pack(fun p ->
     { p with
+        ToolType = ToolType.CreateLocalTool() 
         BuildConfig = "Release"
         OutputPath = buildDir @@ "nuget"
         Version = nugetVersion
@@ -280,6 +281,7 @@ let packSolution formatNugetVersion sln =
   let nugetVersion = formatNugetVersion buildNumber
   Paket.pack(fun p ->
     { p with
+        ToolType = ToolType.CreateLocalTool() 
         BuildConfig = "Release"
         OutputPath = buildDir @@ sln
         Version = nugetVersion
