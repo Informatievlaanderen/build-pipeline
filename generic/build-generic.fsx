@@ -1,29 +1,38 @@
-#I "../../FAKE/tools"
-#r "FakeLib.dll"
-
 #I "../../Newtonsoft.Json/lib/net45"
 #r "Newtonsoft.Json.dll"
 
-open Fake
-open Fake.NpmHelper
-open Fake.AssemblyInfoFile
+open Fake.Core
+open Fake.Core.TargetOperators
+open Fake.IO
+open Fake.IO.FileSystemOperators
+open Fake.DotNet
+open Fake.JavaScript
+
 open System
 open System.IO
 open Newtonsoft.Json.Linq
 
-let buildNumber = environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0.0.0"
-let gitHash = environVarOrDefault "BITBUCKET_COMMIT" ""
-let buildDir = environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
-let dockerRegistry = environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
+Target.initEnvironment()
+
+let currentDirectory = Directory.GetCurrentDirectory()
+let buildNumber = Environment.environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0.0.0"
+let gitHash = Environment.environVarOrDefault "BITBUCKET_COMMIT" ""
+let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
+let dockerRegistry = Environment.environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
 
 let mutable customDotnetExePath : Option<string> = None
+
+let getDotnetExePath defaultPath : string =
+  match customDotnetExePath with
+  | None -> defaultPath
+  | Some dotnetExePath -> Path.GetDirectoryName dotnetExePath
 
 let getDotNetClrVersionFromGlobalJson() : string =
     if not (File.Exists "global.json") then
         failwithf "global.json not found"
     try
         let content = File.ReadAllText "global.json"
-        let json = Newtonsoft.Json.Linq.JObject.Parse content
+        let json = JObject.Parse content
         let sdk = json.Item("clr") :?> JObject
         let version = sdk.Property("version").Value.ToString()
         version
@@ -31,19 +40,19 @@ let getDotNetClrVersionFromGlobalJson() : string =
     | exn -> failwithf "Could not parse global.json: %s" exn.Message
 
 let determineInstalledFxVersion () =
-  printfn "Determining CLR Version using %s" (match customDotnetExePath with
-                                              | None -> Environment.CurrentDirectory
-                                              | Some dotnetExePath -> Path.GetDirectoryName dotnetExePath)
+  printfn "Determining CLR Version using %s" (getDotnetExePath "dotnet")
 
   let clrVersion =
     try
-      ExecProcessAndReturnMessages (fun info ->
-        info.FileName <- match customDotnetExePath with
-                                  | None -> "dotnet"
-                                  | Some dotnetExePath -> dotnetExePath
-        info.WorkingDirectory <- Environment.CurrentDirectory
-        info.Arguments <- "--list-runtimes") (TimeSpan.FromMinutes 30.)
-      |> fun output -> output.Messages
+      let dotnetCommand = getDotnetExePath "dotnet"
+
+      ["--list-runtimes"]
+      |> CreateProcess.fromRawCommand dotnetCommand
+      |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+      |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+      |> CreateProcess.redirectOutput
+      |> Proc.run
+      |> fun output -> output.Result.Output.Split([|  Environment.NewLine |], StringSplitOptions.None)
       |> Seq.filter (fun line -> line.Contains("Microsoft.NETCore.App"))
       |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[1].Trim())
       |> Seq.sortDescending
@@ -55,19 +64,19 @@ let determineInstalledFxVersion () =
   clrVersion
 
 let determineInstalledSdkVersion () =
-  printfn "Determining SDK Version using %s" (match customDotnetExePath with
-                                              | None -> Environment.CurrentDirectory
-                                              | Some dotnetExePath -> Path.GetDirectoryName dotnetExePath)
+  printfn "Determining SDK Version using %s" (getDotnetExePath "dotnet")
 
   let sdkVersion =
     try
-      ExecProcessAndReturnMessages (fun info ->
-        info.FileName <- match customDotnetExePath with
-                                  | None -> "dotnet"
-                                  | Some dotnetExePath -> dotnetExePath
-        info.WorkingDirectory <- Environment.CurrentDirectory
-        info.Arguments <- "--list-sdks") (TimeSpan.FromMinutes 30.)
-      |> fun output -> output.Messages
+      let dotnetCommand = getDotnetExePath "dotnet"
+
+      ["--list-sdks"]
+      |> CreateProcess.fromRawCommand dotnetCommand
+      |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+      |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+      |> CreateProcess.redirectOutput
+      |> Proc.run
+      |> fun output -> output.Result.Output.Split([|  Environment.NewLine |], StringSplitOptions.None)
       |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[0].Trim())
       |> Seq.sortDescending
       |> Seq.head
@@ -77,47 +86,40 @@ let determineInstalledSdkVersion () =
   printfn "Determined SDK Version: %s" sdkVersion
   sdkVersion
 
+let setCommonOptions (dotnet: DotNet.Options) =
+  { dotnet with DotNetCliPath = getDotnetExePath dotnet.DotNetCliPath }
+
+let merge a b =
+  a @ b |> List.distinct
+
 let addVersionArguments version args =
-  [|
-    "-p:AssemblyVersion=%s"
-    "-p:FileVersion=%s"
-    "-p:InformationalVersion=%s"
-    "-p:PackageVersion=%s"
-  |]
-  |> Seq.map (fun parameterFormat -> sprintf (PrintfFormat<_,_,_,_> parameterFormat) version)
-  |> Seq.append args
-  |> Seq.toList
+  let versionArgs =
+    [
+      "AssemblyVersion", version
+      "FileVersion", version
+      "InformationalVersion", version
+      "PackageVersion", version
+    ]
+  merge args versionArgs
 
 let addRuntimeFrameworkVersion args =
   let fxVersion = getDotNetClrVersionFromGlobalJson()
-  [|
-    (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion)
-  |]
-  |> Seq.append args
-  |> Seq.toList
-
-let testWithXunit path =
-  let fxVersion = getDotNetClrVersionFromGlobalJson()
-  DotNetCli.RunCommand
-    (fun p ->
-       { p with
-          ToolPath =
-            match customDotnetExePath with
-            | None -> p.ToolPath
-            | Some dotnetExePath -> dotnetExePath
-          WorkingDir = path })
-    (sprintf "xunit -nologo -verbose -configuration Release -xml test-results/TestResults.xml -parallel collections -fxversion %s" fxVersion)
+  let runtimeFrameworkVersionArgs = ["RuntimeFrameworkVersion", fxVersion]
+  merge args runtimeFrameworkVersionArgs
 
 let testWithDotNet path =
-  DotNetCli.Test(fun p ->
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion }
+
+  DotNet.test (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = path
-      AdditionalArgs = ["-l trx"; "--no-build"; "--no-restore"] |> addRuntimeFrameworkVersion
-   })
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoBuild = true
+      NoRestore = true
+      Logger = Some "trx"
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) path
 
 let test project =
   testWithDotNet ("test" @@ project @@ (sprintf "%s.csproj" project))
@@ -126,49 +128,43 @@ let testSolution sln =
   testWithDotNet (sprintf "%s.sln" sln)
 
 let setSolutionVersions formatAssemblyVersion product copyright company x =
-  CreateCSharpAssemblyInfo x
-      [Attribute.Version (formatAssemblyVersion buildNumber)
-       Attribute.FileVersion (formatAssemblyVersion buildNumber)
-       Attribute.InformationalVersion gitHash
-       Attribute.Product product
-       Attribute.Copyright copyright
-       Attribute.Company company]
+  AssemblyInfoFile.createCSharp x
+      [AssemblyInfo.Version (formatAssemblyVersion buildNumber)
+       AssemblyInfo.FileVersion (formatAssemblyVersion buildNumber)
+       AssemblyInfo.InformationalVersion gitHash
+       AssemblyInfo.Product product
+       AssemblyInfo.Copyright copyright
+       AssemblyInfo.Company company]
 
 let buildNeutral formatAssemblyVersion x =
-  DotNetCli.Build(fun p ->
-  { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = x
-      Configuration = "Release"
-      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
-  DotNetCli.Build(fun p ->
+  DotNet.build (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = x
-      Configuration = "Release"
-      Runtime = "debian.8-x64"
-      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoRestore = true
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) x
 
-  DotNetCli.Build(fun p ->
+  DotNet.build (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = x
-      Configuration = "Release"
-      Runtime = "win10-x64"
-      AdditionalArgs = ["--no-restore"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoRestore = true
+      Runtime = Some "debian.8-x64"
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) x
+
+  DotNet.build (fun p ->
+  { p with
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoRestore = true
+      Runtime = Some "win10-x64"
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) x
 
 let build formatAssemblyVersion project =
   buildNeutral formatAssemblyVersion ("src" @@ project @@ (sprintf "%s.csproj" project))
@@ -180,125 +176,97 @@ let buildSolution formatAssemblyVersion sln =
   buildNeutral formatAssemblyVersion (sprintf "%s.sln" sln)
 
 let publish formatAssemblyVersion project =
-  DotNetCli.Publish(fun p ->
-  { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = "src" @@ project @@ (sprintf "%s.csproj" project)
-      Configuration = "Release"
-      Output = buildDir @@ project @@ "linux"
-      Runtime = "debian.8-x64"
-      AdditionalArgs = ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
-  DotNetCli.Publish(fun p ->
+  DotNet.publish (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = "src" @@ project @@ (sprintf "%s.csproj" project)
-      Configuration = "Release"
-      Output = buildDir @@ project @@ "win"
-      Runtime = "win10-x64"
-      AdditionalArgs =  ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  })
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoBuild = true
+      NoRestore = true
+      Runtime = Some "debian.8-x64"
+      SelfContained = Some true
+      OutputPath = Some (buildDir @@ project @@ "linux")
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) ("src" @@ project @@ (sprintf "%s.csproj" project))
+
+  DotNet.publish (fun p ->
+  { p with
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoBuild = true
+      NoRestore = true
+      Runtime = Some "win10-x64"
+      SelfContained = Some true
+      OutputPath = Some (buildDir @@ project @@ "win")
+      MSBuildParams = setMsBuildParams p.MSBuildParams
+  }) ("src" @@ project @@ (sprintf "%s.csproj" project))
 
 let publishSolution formatAssemblyVersion sln =
-  DotNetCli.RunCommand(fun p ->
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir =
+    { msbuild with
+        MaxCpuCount = Some (Some 1)
+        Targets = ["Build"]
+        Properties = [
+          "NoBuild", "true"
+          "SelfContained", "true"
+          "configuration", "Release"
+          "RuntimeIdentifier", runtimeIdentifier
+          "PublishDir", publishDir
+        ] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+    }
+
+  DotNet.msbuild (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:NoBuild=true -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
-      (sprintf "%s.sln" sln)
-      "Release"
-      "debian.8-x64"
-      (buildDir @@ sln @@ "linux")
-      (addRuntimeFrameworkVersion [] |> List.fold (+) " ")
-      (addVersionArguments (formatAssemblyVersion buildNumber) [] |> List.fold (+) " "))
+      Common = setCommonOptions p.Common
+      MSBuildParams = setMsBuildParams p.MSBuildParams "debian.8-x64" (buildDir @@ sln @@ "linux")
+  }) (sprintf "%s.sln" sln)
 
-  // DotNetCli.Publish(fun p ->
-  // { p with
-  //     ToolPath =
-  //       match customDotnetExePath with
-  //       | None -> p.ToolPath
-  //       | Some dotnetExePath -> dotnetExePath
-  //     Project = (sprintf "%s.sln" sln)
-  //     Configuration = "Release"
-  //     Output = buildDir @@ sln @@ "linux"
-  //     Runtime = "debian.8-x64"
-  //     AdditionalArgs = ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  // })
-
-  DotNetCli.RunCommand(fun p ->
+  DotNet.msbuild (fun p ->
   { p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath })
-    (sprintf "msbuild %s -m:1 -target:Publish -restore:False -p:NoBuild=true -p:SelfContained=true -p:configuration=%s -p:RuntimeIdentifier=%s -p:PublishDir=%s %s %s"
-      (sprintf "%s.sln" sln)
-      "Release"
-      "win10-x64"
-      (buildDir @@ sln @@ "win")
-      (addRuntimeFrameworkVersion [] |> List.fold (+) " ")
-      (addVersionArguments (formatAssemblyVersion buildNumber) [] |> List.fold (+) " "))
-
-  // DotNetCli.Publish(fun p ->
-  // { p with
-  //     ToolPath =
-  //       match customDotnetExePath with
-  //       | None -> p.ToolPath
-  //       | Some dotnetExePath -> dotnetExePath
-  //     Project = (sprintf "%s.sln" sln)
-  //     Configuration = "Release"
-  //     Output = buildDir @@ sln @@ "win"
-  //     Runtime = "win10-x64"
-  //     AdditionalArgs =  ["--no-build"; "--no-restore"; "--self-contained true"] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
-  // })
+      Common = setCommonOptions p.Common
+      MSBuildParams = setMsBuildParams p.MSBuildParams "win10-x64" (buildDir @@ sln @@ "win")
+  }) (sprintf "%s.sln" sln)
 
 let containerize dockerRepository project containerName =
   let result1 =
-    ExecProcess (fun info ->
-        info.FileName <- "docker"
-        info.Arguments <- sprintf "build --no-cache --tag %s/%s/%s:%s ." dockerRegistry dockerRepository containerName buildNumber
-        info.WorkingDirectory <- buildDir @@ project @@ "linux"
-    ) (System.TimeSpan.FromMinutes 5.)
+    [ "build"; "--no-cache"; sprintf "--tag %s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber; "."]
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withWorkingDirectory (buildDir @@ project @@ "linux")
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
 
-  if result1 <> 0 then failwith "Failed result from Docker Build"
+  if result1.ExitCode <> 0 then failwith "Failed result from Docker Build"
 
   let result2 =
-    ExecProcess (fun info ->
-        info.FileName <- "docker"
-        info.Arguments <- sprintf "tag %s/%s/%s:%s %s/%s/%s:latest" dockerRegistry dockerRepository containerName buildNumber dockerRegistry dockerRepository containerName
-    ) (System.TimeSpan.FromMinutes 5.)
+    [ "tag"; sprintf "%s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber; sprintf "%s/%s/%s:latest" dockerRegistry dockerRepository containerName]
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
 
-  if result2 <> 0 then failwith "Failed result from Docker Tag"
+  if result2.ExitCode <> 0 then failwith "Failed result from Docker Tag"
 
 let push dockerRepository containerName =
   let result1 =
-    ExecProcess (fun info ->
-        info.FileName <- "docker"
-        info.Arguments <- sprintf "push %s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber
-    ) (System.TimeSpan.FromMinutes 5.)
+    [ "push"; sprintf "%s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber]
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
 
-  if result1 <> 0 then failwith "Failed result from Docker Push"
+  if result1.ExitCode <> 0 then failwith "Failed result from Docker Push"
 
   let result2 =
-    ExecProcess (fun info ->
-        info.FileName <- "docker"
-        info.Arguments <- sprintf "push %s/%s/%s:latest" dockerRegistry dockerRepository containerName
-    ) (System.TimeSpan.FromMinutes 5.)
+    [ "push"; sprintf "%s/%s/%s:latest" dockerRegistry dockerRepository containerName]
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
 
-  if result2 <> 0 then failwith "Failed result from Docker Push Latest"
+  if result2.ExitCode <> 0 then failwith "Failed result from Docker Push Latest"
 
 let pack formatNugetVersion project =
   let nugetVersion = formatNugetVersion buildNumber
-  Paket.Pack(fun p ->
+  Paket.pack(fun p ->
     { p with
         BuildConfig = "Release"
         OutputPath = buildDir @@ "nuget"
@@ -310,7 +278,7 @@ let pack formatNugetVersion project =
 
 let packSolution formatNugetVersion sln =
   let nugetVersion = formatNugetVersion buildNumber
-  Paket.Pack(fun p ->
+  Paket.pack(fun p ->
     { p with
         BuildConfig = "Release"
         OutputPath = buildDir @@ sln
@@ -318,15 +286,23 @@ let packSolution formatNugetVersion sln =
     }
   )
 
-Target "DotNetCli" (fun _ ->
+Target.create "DotNetCli" (fun _ ->
   let desiredFxVersion = getDotNetClrVersionFromGlobalJson()
   let mutable installedFxVersion = determineInstalledFxVersion()
-  let desiredSdkVersion = DotNetCli.GetDotNetSDKVersionFromGlobalJson()
+  let desiredSdkVersion = DotNet.getSDKVersionFromGlobalJson()
   let mutable installedSdkVersion = determineInstalledSdkVersion()
 
   if desiredSdkVersion <> installedSdkVersion then
     printfn "Invalid SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
-    customDotnetExePath <- Some <| DotNetCli.InstallDotNetSDK(DotNetCli.GetDotNetSDKVersionFromGlobalJson())
+
+    let install = DotNet.install (fun p ->
+      { p with
+          Version = DotNet.getSDKVersionFromGlobalJson() |> DotNet.Version
+      })
+
+    let installOptions = DotNet.Options.Create() |> install
+
+    customDotnetExePath <- Some installOptions.DotNetCliPath
     installedFxVersion <- determineInstalledFxVersion()
     installedSdkVersion <- determineInstalledSdkVersion()
     printfn "Custom SDK Path: %s" customDotnetExePath.Value
@@ -338,45 +314,47 @@ Target "DotNetCli" (fun _ ->
   printfn ".NET Core SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
 )
 
-Target "Clean" (fun _ -> CleanDir buildDir)
+Target.create "Clean" (fun _ -> Shell.cleanDir buildDir)
 
 let restore sln =
-  DotNetCli.Restore(fun p ->
-  {
-    p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      Project = (sprintf "%s.sln" sln)
-      AdditionalArgs = ["-r win10-x64"; "-r debian.8-x64" ] |> addRuntimeFrameworkVersion
-  })
+  let fxVersion = getDotNetClrVersionFromGlobalJson()
+  let dotnetCommand = getDotnetExePath "dotnet"
 
-Target "Restore" (fun _ ->
-  DotNetCli.Restore(fun p ->
-  {
-    p with
-      ToolPath =
-        match customDotnetExePath with
-        | None -> p.ToolPath
-        | Some dotnetExePath -> dotnetExePath
-      AdditionalArgs = ["-r win10-x64"; "-r debian.8-x64" ] |> addRuntimeFrameworkVersion
-  })
+  let restore =
+    ["restore"; "-r"; "win10-x64"; "-r"; "debian.8-x64"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion); (sprintf "%s.sln" sln)]
+    |> CreateProcess.fromRawCommand dotnetCommand
+    |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+    |> CreateProcess.redirectOutput
+    |> Proc.run
+
+  if restore.ExitCode <> 0 then failwith "Failed result from SLN Restore"
+
+Target.create "Restore" (fun _ ->
+  let fxVersion = getDotNetClrVersionFromGlobalJson()
+  let dotnetCommand = getDotnetExePath "dotnet"
+
+  let restore =
+    ["restore"; "-r"; "win10-x64"; "-r"; "debian.8-x64"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion)]
+    |> CreateProcess.fromRawCommand dotnetCommand
+    |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+    |> CreateProcess.redirectOutput
+    |> Proc.run
+
+  if restore.ExitCode <> 0 then failwith "Failed result from Restore"
 )
 
-Target "NpmInstall" (fun _ ->
-  Npm (fun p ->
-  { p with
-      Command = Install Standard
-  })
- )
+Target.create "NpmInstall" (fun _ ->
+  Npm.install |> ignore
+)
 
-Target "DockerLogin" (fun _ ->
+Target.create "DockerLogin" (fun _ ->
   let dockerLogin =
-    ExecProcess (fun info ->
-        info.FileName <- "bash"
-        info.Arguments <- "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-docker-login.sh"
-    ) (System.TimeSpan.FromMinutes 5.)
+    [ "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-docker-login.sh"]
+    |> CreateProcess.fromRawCommand "bash"
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
 
-  if dockerLogin <> 0 then failwith "Failed result from Docker Login"
+  if dockerLogin.ExitCode <> 0 then failwith "Failed result from Docker Login"
 )
