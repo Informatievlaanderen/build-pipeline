@@ -19,7 +19,7 @@ let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (current
 Target.create "Lib_Pack" (fun _ ->
   Paket.pack(fun p ->
     { p with
-        ToolType = ToolType.CreateLocalTool() |> ToolType.withDefaultToolCommandName "paket"
+        ToolType = ToolType.CreateLocalTool()
         OutputPath = buildDir @@ "Be.Vlaanderen.Basisregisters.Build.Pipeline"
         Version = buildNumber
     }
