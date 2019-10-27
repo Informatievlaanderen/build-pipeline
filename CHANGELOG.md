@@ -1,3 +1,11 @@
+## [2.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v2.0.0...v2.0.1) (2019-10-27)
+
+
+### Bug Fixes
+
+* get rid of unneeded fake syntax ([5357cce](https://github.com/Informatievlaanderen/build-pipeline/commit/5357cce))
+* make publish and pack work ([87389c9](https://github.com/Informatievlaanderen/build-pipeline/commit/87389c9))
+
 # [2.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v1.11.1...v2.0.0) (2019-10-27)
 
 
