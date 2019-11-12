@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v2.0.1...v3.0.0) (2019-11-12)
+
+
+### Features
+
+* upgrade to .net core 3 ([4cc2680](https://github.com/Informatievlaanderen/build-pipeline/commit/4cc2680))
+
+
+### BREAKING CHANGES
+
+* Switched to .NET Core 3
+
 ## [2.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v2.0.0...v2.0.1) (2019-10-27)
 
 
