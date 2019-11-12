@@ -153,7 +153,7 @@ let buildNeutral formatAssemblyVersion x =
       Common = setCommonOptions p.Common
       Configuration = DotNet.Release
       NoRestore = true
-      Runtime = Some "debian.8-x64"
+      Runtime = Some "linux-x64"
       MSBuildParams = setMsBuildParams p.MSBuildParams
   }) x
 
@@ -162,7 +162,7 @@ let buildNeutral formatAssemblyVersion x =
       Common = setCommonOptions p.Common
       Configuration = DotNet.Release
       NoRestore = true
-      Runtime = Some "win10-x64"
+      Runtime = Some "win-x64"
       MSBuildParams = setMsBuildParams p.MSBuildParams
   }) x
 
@@ -185,7 +185,7 @@ let publish formatAssemblyVersion project =
       Configuration = DotNet.Release
       NoBuild = true
       NoRestore = true
-      Runtime = Some "debian.8-x64"
+      Runtime = Some "linux-x64"
       SelfContained = Some true
       OutputPath = Some (buildDir @@ project @@ "linux")
       MSBuildParams = setMsBuildParams p.MSBuildParams
@@ -197,7 +197,7 @@ let publish formatAssemblyVersion project =
       Configuration = DotNet.Release
       NoBuild = true
       NoRestore = true
-      Runtime = Some "win10-x64"
+      Runtime = Some "win-x64"
       SelfContained = Some true
       OutputPath = Some (buildDir @@ project @@ "win")
       MSBuildParams = setMsBuildParams p.MSBuildParams
@@ -220,13 +220,13 @@ let publishSolution formatAssemblyVersion sln =
   DotNet.msbuild (fun p ->
   { p with
       Common = setCommonOptions p.Common
-      MSBuildParams = setMsBuildParams p.MSBuildParams "debian.8-x64" (buildDir @@ sln @@ "linux")
+      MSBuildParams = setMsBuildParams p.MSBuildParams "linux-x64" (buildDir @@ sln @@ "linux")
   }) (sprintf "%s.sln" sln)
 
   DotNet.msbuild (fun p ->
   { p with
       Common = setCommonOptions p.Common
-      MSBuildParams = setMsBuildParams p.MSBuildParams "win10-x64" (buildDir @@ sln @@ "win")
+      MSBuildParams = setMsBuildParams p.MSBuildParams "win-x64" (buildDir @@ sln @@ "win")
   }) (sprintf "%s.sln" sln)
 
 let containerize dockerRepository project containerName =
@@ -323,7 +323,7 @@ let restore sln =
   let dotnetCommand = getDotnetExePath "dotnet"
 
   let restore =
-    ["restore"; "-r"; "win10-x64"; "-r"; "debian.8-x64"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion); (sprintf "%s.sln" sln)]
+    ["restore"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion); (sprintf "%s.sln" sln)]
     |> CreateProcess.fromRawCommand dotnetCommand
     |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
     |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
@@ -337,7 +337,7 @@ Target.create "Restore" (fun _ ->
   let dotnetCommand = getDotnetExePath "dotnet"
 
   let restore =
-    ["restore"; "-r"; "win10-x64"; "-r"; "debian.8-x64"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion)]
+    ["restore"; (sprintf "-p:RuntimeFrameworkVersion=%s" fxVersion)]
     |> CreateProcess.fromRawCommand dotnetCommand
     |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
     |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)

@@ -3,16 +3,23 @@
 ## build.sh
 
 ```bash
-run $PAKET_EXE restore
+#!/usr/bin/env bash
+set -e
 
-chmod +x packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/*
+dotnet tool restore
+dotnet paket restore
 
-run $FAKE_EXE build.fsx "$@"
+if [ $# -eq 0 ]
+then
+  FAKE_ALLOW_NO_DEPENDENCIES=true dotnet fake build
+else
+  FAKE_ALLOW_NO_DEPENDENCIES=true dotnet fake build -t "$@"
+fi
 ```
 
 ## build.fsx
 
-```
+```bash
 #load "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/build-generic.fsx"
 
 open Fake
@@ -21,7 +28,7 @@ open ``Build-generic``
 
 ## package.json
 
-```
+```json
 {
     "path": "@semantic-release/exec",
     "cmd": "node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-myget.js dist/Be.Vlaanderen.Basisregisters.AggregateSource/Be.Vlaanderen.Basisregisters.AggregateSource.${nextRelease.version}.nupkg"
