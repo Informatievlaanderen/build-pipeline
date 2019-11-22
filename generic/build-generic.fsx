@@ -231,7 +231,7 @@ let publishSolution formatAssemblyVersion sln =
 
 let containerize dockerRepository project containerName =
   let result1 =
-    [ "build"; "--no-cache"; sprintf "--tag %s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber; "."]
+    [ "build"; "--no-cache"; "--tag"; sprintf "%s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber; "."]
     |> CreateProcess.fromRawCommand "docker"
     |> CreateProcess.withWorkingDirectory (buildDir @@ project @@ "linux")
     |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
