@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.0.0...v3.0.1) (2019-11-22)
+
+
+### Bug Fixes
+
+* use correct docker tag flag ([09fe646](https://github.com/Informatievlaanderen/build-pipeline/commit/09fe646))
+
 # [3.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v2.0.1...v3.0.0) (2019-11-12)
 
 
