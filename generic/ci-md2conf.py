@@ -107,7 +107,6 @@ def convertCodeBlock(html):
 
 # Converts html for info, note or warning macros
 def convertInfoMacros(html):
-
 	infoTag = '<p><ac:structured-macro ac:name="info"><ac:rich-text-body><p>'
 	noteTag = infoTag.replace('info','note')
 	warningTag = infoTag.replace('info','warning')
@@ -374,7 +373,6 @@ def getAttachment(pageId, filename):
 
 # Upload an attachment
 def uploadAttachment(pageId, file, comment):
-
 	if re.search('http.*', file):
 		return False
 
@@ -417,6 +415,7 @@ def main():
 		mdContent = mdContent.replace('"', '&quot;')
 		mdContent = mdContent.replace('<', '&lt;')
 		mdContent = mdContent.replace('>', '&gt;')
+		mdContent = '## Changelog\n' + mdContent
 		html = markdown.markdown(mdContent, extensions = ['markdown.extensions.tables', 'markdown.extensions.fenced_code'])
 
 	html = '\n'.join(html.split('\n')[1:])
