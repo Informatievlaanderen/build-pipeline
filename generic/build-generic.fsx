@@ -52,7 +52,7 @@ let determineInstalledFxVersion () =
       |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
       |> CreateProcess.redirectOutput
       |> Proc.run
-      |> fun output -> output.Result.Output.Split([|  Environment.NewLine |], StringSplitOptions.None)
+      |> fun output -> output.Result.Output.Split([| Environment.NewLine |], StringSplitOptions.None)
       |> Seq.filter (fun line -> line.Contains("Microsoft.NETCore.App"))
       |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[1].Trim())
       |> Seq.sortDescending
@@ -76,7 +76,7 @@ let determineInstalledSdkVersion () =
       |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
       |> CreateProcess.redirectOutput
       |> Proc.run
-      |> fun output -> output.Result.Output.Split([|  Environment.NewLine |], StringSplitOptions.None)
+      |> fun output -> output.Result.Output.Split([| Environment.NewLine |], StringSplitOptions.None)
       |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[0].Trim())
       |> Seq.sortDescending
       |> Seq.head
@@ -268,7 +268,7 @@ let pack formatNugetVersion project =
   let nugetVersion = formatNugetVersion buildNumber
   Paket.pack(fun p ->
     { p with
-        ToolType = ToolType.CreateLocalTool() 
+        ToolType = ToolType.CreateLocalTool()
         BuildConfig = "Release"
         OutputPath = buildDir @@ "nuget"
         Version = nugetVersion
@@ -281,7 +281,7 @@ let packSolution formatNugetVersion sln =
   let nugetVersion = formatNugetVersion buildNumber
   Paket.pack(fun p ->
     { p with
-        ToolType = ToolType.CreateLocalTool() 
+        ToolType = ToolType.CreateLocalTool()
         BuildConfig = "Release"
         OutputPath = buildDir @@ sln
         Version = nugetVersion
