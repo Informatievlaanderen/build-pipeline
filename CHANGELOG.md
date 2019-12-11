@@ -1,3 +1,15 @@
+# [3.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.0.1...v3.1.0) (2019-12-11)
+
+
+### Bug Fixes
+
+* add title for changelog push to confluence ([57f7b63](https://github.com/Informatievlaanderen/build-pipeline/commit/57f7b63))
+
+
+### Features
+
+* upgrade to netcoreapp31 ([4a00d37](https://github.com/Informatievlaanderen/build-pipeline/commit/4a00d37))
+
 ## [3.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.0.0...v3.0.1) (2019-11-22)
 
 
