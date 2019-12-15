@@ -23,6 +23,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <RestoreFallbackFolders>clear</RestoreFallbackFolders>
   </PropertyGroup>
 
