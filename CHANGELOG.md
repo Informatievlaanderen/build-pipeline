@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.1.0...v3.2.0) (2019-12-15)
+
+
+### Features
+
+* support nullable reference types ([41357ff](https://github.com/Informatievlaanderen/build-pipeline/commit/41357ff1bc38a68cdd89fc35308090cb760be9b1))
+
 # [3.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.0.1...v3.1.0) (2019-12-11)
 
 
