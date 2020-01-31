@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.0...v3.3.1) (2020-01-31)
+
+
+### Bug Fixes
+
+* compile readytorun when platform matches ([3652256](https://github.com/Informatievlaanderen/build-pipeline/commit/3652256af9a90ab9eb744ca50eaea9e825e508f2))
+
 # [3.3.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.2.0...v3.3.0) (2020-01-31)
 
 
