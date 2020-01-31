@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.2.0...v3.3.0) (2020-01-31)
+
+
+### Features
+
+* bump to net core 3.1.1 and enable ready to run ([9c7332d](https://github.com/Informatievlaanderen/build-pipeline/commit/9c7332d146681dc3e0a636b7d66970fc700ef5b0))
+
 # [3.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.1.0...v3.2.0) (2019-12-15)
 
 
