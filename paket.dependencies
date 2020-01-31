@@ -8,7 +8,7 @@ source https://api.nuget.org/v3/index.json
 // When doing development as an employee, uncomment this to use the private NuGet proxy
 // source https://informatievlaanderen.myget.org/F/nuget-mirror/api/v3/index.json username: "%MYGET_FEED_USER%" password: "%MYGET_FEED_PASS%" authtype: "basic"
 
-nuget Newtonsoft.Json 12.0.2
+nuget Newtonsoft.Json 12.0.3
 
 nuget Fake.Core.Environment
 nuget Fake.Core.Process
