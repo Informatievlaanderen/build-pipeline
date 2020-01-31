@@ -107,6 +107,13 @@ let addRuntimeFrameworkVersion args =
   let runtimeFrameworkVersionArgs = ["RuntimeFrameworkVersion", fxVersion]
   merge args runtimeFrameworkVersionArgs
 
+let addReadyToRun readyToRun args =
+  let readyToRunArgs =
+    [
+      "PublishReadyToRun", readyToRun.ToString()
+    ]
+  merge args readyToRunArgs
+
 let testWithDotNet path =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion }
@@ -137,15 +144,15 @@ let setSolutionVersions formatAssemblyVersion product copyright company x =
        AssemblyInfo.Company company]
 
 let buildNeutral formatAssemblyVersion x =
-  let setMsBuildParams (msbuild: MSBuild.CliArguments) =
-    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber) }
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
   DotNet.build (fun p ->
   { p with
       Common = setCommonOptions p.Common
       Configuration = DotNet.Release
       NoRestore = true
-      MSBuildParams = setMsBuildParams p.MSBuildParams
+      MSBuildParams = (setMsBuildParams p.MSBuildParams false)
   }) x
 
   DotNet.build (fun p ->
@@ -154,7 +161,7 @@ let buildNeutral formatAssemblyVersion x =
       Configuration = DotNet.Release
       NoRestore = true
       Runtime = Some "linux-x64"
-      MSBuildParams = setMsBuildParams p.MSBuildParams
+      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isLinux)
   }) x
 
   DotNet.build (fun p ->
@@ -163,7 +170,7 @@ let buildNeutral formatAssemblyVersion x =
       Configuration = DotNet.Release
       NoRestore = true
       Runtime = Some "win-x64"
-      MSBuildParams = setMsBuildParams p.MSBuildParams
+      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isWindows)
   }) x
 
 let build formatAssemblyVersion project =
@@ -176,8 +183,8 @@ let buildSolution formatAssemblyVersion sln =
   buildNeutral formatAssemblyVersion (sprintf "%s.sln" sln)
 
 let publish formatAssemblyVersion project =
-  let setMsBuildParams (msbuild: MSBuild.CliArguments) =
-    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber) }
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
   DotNet.publish (fun p ->
   { p with
@@ -188,7 +195,7 @@ let publish formatAssemblyVersion project =
       Runtime = Some "linux-x64"
       SelfContained = Some true
       OutputPath = Some (buildDir @@ project @@ "linux")
-      MSBuildParams = setMsBuildParams p.MSBuildParams
+      MSBuildParams = (setMsBuildParams p.MSBuildParams  Environment.isLinux)
   }) ("src" @@ project @@ (sprintf "%s.csproj" project))
 
   DotNet.publish (fun p ->
@@ -200,11 +207,11 @@ let publish formatAssemblyVersion project =
       Runtime = Some "win-x64"
       SelfContained = Some true
       OutputPath = Some (buildDir @@ project @@ "win")
-      MSBuildParams = setMsBuildParams p.MSBuildParams
+      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isWindows)
   }) ("src" @@ project @@ (sprintf "%s.csproj" project))
 
 let publishSolution formatAssemblyVersion sln =
-  let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir =
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir readyToRun =
     { msbuild with
         MaxCpuCount = Some (Some 1)
         Targets = ["Publish"]
@@ -214,19 +221,19 @@ let publishSolution formatAssemblyVersion sln =
           "configuration", "Release"
           "RuntimeIdentifier", runtimeIdentifier
           "PublishDir", publishDir
-        ] |> addRuntimeFrameworkVersion |> addVersionArguments (formatAssemblyVersion buildNumber)
+        ] |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber)
     }
 
   DotNet.msbuild (fun p ->
   { p with
       Common = setCommonOptions p.Common
-      MSBuildParams = setMsBuildParams p.MSBuildParams "linux-x64" (buildDir @@ sln @@ "linux")
+      MSBuildParams = (setMsBuildParams p.MSBuildParams "linux-x64" (buildDir @@ sln @@ "linux") Environment.isLinux)
   }) (sprintf "%s.sln" sln)
 
   DotNet.msbuild (fun p ->
   { p with
       Common = setCommonOptions p.Common
-      MSBuildParams = setMsBuildParams p.MSBuildParams "win-x64" (buildDir @@ sln @@ "win")
+      MSBuildParams = (setMsBuildParams p.MSBuildParams "win-x64" (buildDir @@ sln @@ "win") Environment.isWindows)
   }) (sprintf "%s.sln" sln)
 
 let containerize dockerRepository project containerName =
