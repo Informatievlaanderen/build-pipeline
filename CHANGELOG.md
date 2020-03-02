@@ -1,3 +1,10 @@
+## [3.3.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.1...v3.3.2) (2020-03-02)
+
+
+### Bug Fixes
+
+* bump to netcore 3.1.2 ([7e4db5c](https://github.com/Informatievlaanderen/build-pipeline/commit/7e4db5cab7278030c548807a8a8234dcdea31a43))
+
 ## [3.3.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.0...v3.3.1) (2020-01-31)
 
 
