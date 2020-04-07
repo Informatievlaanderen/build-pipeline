@@ -20,12 +20,13 @@ let gitHash = Environment.environVarOrDefault "BITBUCKET_COMMIT" ""
 let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 let dockerRegistry = Environment.environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
 
+let mutable supportedRuntimeIdentifiers = [ "linux-x64", "win-x64" ]
 let mutable customDotnetExePath : Option<string> = None
 
 let getDotnetExePath defaultPath : string =
   match customDotnetExePath with
   | None -> defaultPath
-  | Some dotnetExePath -> Path.GetDirectoryName dotnetExePath
+  | Some dotnetExePath -> dotnetExePath
 
 let getDotNetClrVersionFromGlobalJson() : string =
     if not (File.Exists "global.json") then
@@ -38,6 +39,53 @@ let getDotNetClrVersionFromGlobalJson() : string =
         version
     with
     | exn -> failwithf "Could not parse global.json: %s" exn.Message
+
+let determineInstalledFxVersions () : string list =
+  printfn "Determining CLR Versions using %s" (getDotnetExePath "dotnet")
+
+  let clrVersions =
+    try
+      let dotnetCommand = getDotnetExePath "dotnet"
+
+      ["--list-runtimes"]
+      |> CreateProcess.fromRawCommand dotnetCommand
+      |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+      |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+      |> CreateProcess.redirectOutput
+      |> Proc.run
+      |> fun output -> output.Result.Output.Split([| Environment.NewLine |], StringSplitOptions.None)
+      |> Seq.filter (fun line -> line.Contains("Microsoft.NETCore.App"))
+      |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[1].Trim())
+      |> Seq.sortDescending
+      |> Seq.toList
+    with
+      | _ -> []
+
+  printfn "Determined CLR Versions: %A" clrVersions
+  clrVersions
+
+let determineInstalledSdkVersions () : string list =
+  printfn "Determining SDK Versions using %s" (getDotnetExePath "dotnet")
+
+  let sdkVersions =
+    try
+      let dotnetCommand = getDotnetExePath "dotnet"
+
+      ["--list-sdks"]
+      |> CreateProcess.fromRawCommand dotnetCommand
+      |> CreateProcess.withWorkingDirectory Environment.CurrentDirectory
+      |> CreateProcess.withTimeout (TimeSpan.FromMinutes 30.)
+      |> CreateProcess.redirectOutput
+      |> Proc.run
+      |> fun output -> output.Result.Output.Split([| Environment.NewLine |], StringSplitOptions.None)
+      |> Seq.map (fun line -> line.Split([| " " |], StringSplitOptions.None).[0].Trim())
+      |> Seq.sortDescending
+      |> Seq.toList
+    with
+      | _ -> []
+
+  printfn "Determined SDK Versions: %A" sdkVersions
+  sdkVersions
 
 let determineInstalledFxVersion () =
   printfn "Determining CLR Version using %s" (getDotnetExePath "dotnet")
@@ -155,23 +203,21 @@ let buildNeutral formatAssemblyVersion x =
       MSBuildParams = (setMsBuildParams p.MSBuildParams false)
   }) x
 
-  DotNet.build (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      Configuration = DotNet.Release
-      NoRestore = true
-      Runtime = Some "linux-x64"
-      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isLinux)
-  }) x
+  for runtimeIdentifier in supportedRuntimeIdentifiers do
+    let readyToRun =
+      match runtimeIdentifier with
+      | "linux-x64" -> Environment.isLinux
+      | "win-x64" -> Environment.isWindows
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
-  DotNet.build (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      Configuration = DotNet.Release
-      NoRestore = true
-      Runtime = Some "win-x64"
-      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isWindows)
-  }) x
+    DotNet.build (fun p ->
+    { p with
+        Common = setCommonOptions p.Common
+        Configuration = DotNet.Release
+        NoRestore = true
+        Runtime = Some runtimeIdentifier
+        MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
+    }) x
 
 let build formatAssemblyVersion project =
   buildNeutral formatAssemblyVersion ("src" @@ project @@ (sprintf "%s.csproj" project))
@@ -186,29 +232,30 @@ let publish formatAssemblyVersion project =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
-  DotNet.publish (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      Configuration = DotNet.Release
-      NoBuild = true
-      NoRestore = true
-      Runtime = Some "linux-x64"
-      SelfContained = Some true
-      OutputPath = Some (buildDir @@ project @@ "linux")
-      MSBuildParams = (setMsBuildParams p.MSBuildParams  Environment.isLinux)
-  }) ("src" @@ project @@ (sprintf "%s.csproj" project))
+  for runtimeIdentifier in supportedRuntimeIdentifiers do
+    let readyToRun =
+      match runtimeIdentifier with
+      | "linux-x64" -> Environment.isLinux
+      | "win-x64" -> Environment.isWindows
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
-  DotNet.publish (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      Configuration = DotNet.Release
-      NoBuild = true
-      NoRestore = true
-      Runtime = Some "win-x64"
-      SelfContained = Some true
-      OutputPath = Some (buildDir @@ project @@ "win")
-      MSBuildParams = (setMsBuildParams p.MSBuildParams Environment.isWindows)
-  }) ("src" @@ project @@ (sprintf "%s.csproj" project))
+    let outputDirectory =
+      match runtimeIdentifier with
+      | "linux-x64" -> "linux"
+      | "win-x64" -> "win"
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+
+    DotNet.publish (fun p ->
+    { p with
+        Common = setCommonOptions p.Common
+        Configuration = DotNet.Release
+        NoBuild = true
+        NoRestore = true
+        Runtime = Some runtimeIdentifier
+        SelfContained = Some true
+        OutputPath = Some (buildDir @@ project @@ outputDirectory)
+        MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
+    }) ("src" @@ project @@ (sprintf "%s.csproj" project))
 
 let publishSolution formatAssemblyVersion sln =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir readyToRun =
@@ -224,17 +271,24 @@ let publishSolution formatAssemblyVersion sln =
         ] |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber)
     }
 
-  DotNet.msbuild (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      MSBuildParams = (setMsBuildParams p.MSBuildParams "linux-x64" (buildDir @@ sln @@ "linux") Environment.isLinux)
-  }) (sprintf "%s.sln" sln)
+  for runtimeIdentifier in supportedRuntimeIdentifiers do
+    let readyToRun =
+      match runtimeIdentifier with
+      | "linux-x64" -> Environment.isLinux
+      | "win-x64" -> Environment.isWindows
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
-  DotNet.msbuild (fun p ->
-  { p with
-      Common = setCommonOptions p.Common
-      MSBuildParams = (setMsBuildParams p.MSBuildParams "win-x64" (buildDir @@ sln @@ "win") Environment.isWindows)
-  }) (sprintf "%s.sln" sln)
+    let outputDirectory =
+      match runtimeIdentifier with
+      | "linux-x64" -> "linux"
+      | "win-x64" -> "win"
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+
+    DotNet.msbuild (fun p ->
+    { p with
+        Common = setCommonOptions p.Common
+        MSBuildParams = (setMsBuildParams p.MSBuildParams runtimeIdentifier (buildDir @@ sln @@ outputDirectory) readyToRun)
+    }) (sprintf "%s.sln" sln)
 
 let containerize dockerRepository project containerName =
   let result1 =
@@ -297,12 +351,12 @@ let packSolution formatNugetVersion sln =
 
 Target.create "DotNetCli" (fun _ ->
   let desiredFxVersion = getDotNetClrVersionFromGlobalJson()
-  let mutable installedFxVersion = determineInstalledFxVersion()
+  let installedFxVersions = determineInstalledFxVersions()
   let desiredSdkVersion = DotNet.getSDKVersionFromGlobalJson()
-  let mutable installedSdkVersion = determineInstalledSdkVersion()
+  let installedSdkVersions = determineInstalledSdkVersions()
 
-  if desiredSdkVersion <> installedSdkVersion then
-    printfn "Invalid SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
+  if not (List.contains desiredSdkVersion installedSdkVersions) then
+    printfn "Invalid SDK Version, Desired: %s Installed: %A" desiredSdkVersion installedSdkVersions
 
     let install = DotNet.install (fun p ->
       { p with
@@ -312,15 +366,14 @@ Target.create "DotNetCli" (fun _ ->
     let installOptions = DotNet.Options.Create() |> install
 
     customDotnetExePath <- Some installOptions.DotNetCliPath
-    installedFxVersion <- determineInstalledFxVersion()
-    installedSdkVersion <- determineInstalledSdkVersion()
     printfn "Custom SDK Path: %s" customDotnetExePath.Value
+  else
+    printfn "Desired SDK Version %s found" desiredSdkVersion
 
-  if desiredFxVersion > installedFxVersion then
-    failwithf "Invalid CLR Version, Desired: %s Installed: %s" desiredFxVersion installedFxVersion
-
-  printfn ".NET Core CLR Version, Desired: %s Installed: %s" desiredFxVersion installedFxVersion
-  printfn ".NET Core SDK Version, Desired: %s Installed: %s" desiredSdkVersion installedSdkVersion
+  if not (List.contains desiredFxVersion installedFxVersions) then
+    failwithf "Invalid CLR Version, Desired: %s Installed: %A" desiredFxVersion installedFxVersions
+  else
+    printfn "Desired CLR Version %s found" desiredFxVersion
 )
 
 Target.create "Clean" (fun _ -> Shell.cleanDir buildDir)
