@@ -1,3 +1,10 @@
+## [3.3.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.4...v3.3.5) (2020-04-08)
+
+
+### Bug Fixes
+
+* use correct array syntax ([768a618](https://github.com/Informatievlaanderen/build-pipeline/commit/768a61895b17f084224925ff5b837970aa25ee7d))
+
 ## [3.3.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.3...v3.3.4) (2020-04-08)
 
 
