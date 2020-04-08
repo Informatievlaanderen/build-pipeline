@@ -1,3 +1,10 @@
+## [3.3.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.3...v3.3.4) (2020-04-08)
+
+
+### Bug Fixes
+
+* use correct build user ([b3b4c18](https://github.com/Informatievlaanderen/build-pipeline/commit/b3b4c18deface07c9b4e142d57ee8aae7418aafd))
+
 ## [3.3.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.2...v3.3.3) (2020-04-08)
 
 
