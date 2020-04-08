@@ -1,3 +1,10 @@
+## [3.3.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.2...v3.3.3) (2020-04-08)
+
+
+### Bug Fixes
+
+* dotnetcli detection - suppported runtime identifiers ([26f8983](https://github.com/Informatievlaanderen/build-pipeline/commit/26f8983b59f35954452171d86ea1b2a5317d5c09))
+
 ## [3.3.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.1...v3.3.2) (2020-03-02)
 
 
