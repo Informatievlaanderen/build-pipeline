@@ -20,7 +20,7 @@ let gitHash = Environment.environVarOrDefault "BITBUCKET_COMMIT" ""
 let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 let dockerRegistry = Environment.environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
 
-let mutable supportedRuntimeIdentifiers = [ "linux-x64", "win-x64" ]
+let mutable supportedRuntimeIdentifiers = [ "linux-x64"; "win-x64" ]
 let mutable customDotnetExePath : Option<string> = None
 
 let getDotnetExePath defaultPath : string =
