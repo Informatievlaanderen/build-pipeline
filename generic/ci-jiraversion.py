@@ -21,95 +21,95 @@ args = parser.parse_args()
 
 # Assign global variables
 try:
-	version = args.version
-	project = args.project
-	username = os.getenv('JIRA_USERNAME', args.username)
-	password = os.getenv('JIRA_PASSWORD', args.password)
-	orgname = os.getenv('JIRA_ORGNAME', args.orgname)
-	github = args.github
-	repo = args.repo
-	nossl = args.nossl
+  version = args.version
+  project = args.project
+  username = os.getenv('JIRA_USERNAME', args.username)
+  password = os.getenv('JIRA_PASSWORD', args.password)
+  orgname = os.getenv('JIRA_ORGNAME', args.orgname)
+  github = args.github
+  repo = args.repo
+  nossl = args.nossl
 
-	if version is None:
-		print 'Error: Version not specified by option.'
-		sys.exit(1)
+  if version is None:
+    print('Error: Version not specified by option.')
+    sys.exit(1)
 
-	if project is None:
-		print 'Error: Project not specified by option.'
-		sys.exit(1)
+  if project is None:
+    print('Error: Project not specified by option.')
+    sys.exit(1)
 
-	if username is None:
-		print 'Error: Username not specified by environment variable or option.'
-		sys.exit(1)
+  if username is None:
+    print('Error: Username not specified by environment variable or option.')
+    sys.exit(1)
 
-	if password is None:
-		print 'Error: Password not specified by environment variable or option.'
-		sys.exit(1)
+  if password is None:
+    print('Error: Password not specified by environment variable or option.')
+    sys.exit(1)
 
-	if orgname is None:
-		print 'Error: Org Name not specified by environment variable or option.'
-		sys.exit(1)
+  if orgname is None:
+    print('Error: Org Name not specified by environment variable or option.')
+    sys.exit(1)
 
-	if github is None:
-		print 'Error: Github not specified by option.'
-		sys.exit(1)
+  if github is None:
+    print('Error: Github not specified by option.')
+    sys.exit(1)
 
-	if repo is None:
-		print 'Error: Repository not specified by option.'
-		sys.exit(1)
+  if repo is None:
+    print('Error: Repository not specified by option.')
+    sys.exit(1)
 
-	projectUrl = 'https://%s.atlassian.net/' % orgname
-	if nossl:
-		projectUrl.replace('https://','http://')
+  projectUrl = 'https://%s.atlassian.net/' % orgname
+  if nossl:
+    projectUrl.replace('https://','http://')
 
-except Exception, err:
-	print '\n\nException caught:\n%s ' % (err)
-        print '\nFailed to process command line arguments. Exiting.'
-        sys.exit(1)
+except Exception as err:
+  print('\n\nException caught:\n%s ' % (err))
+  print('\nFailed to process command line arguments. Exiting.')
+  sys.exit(1)
 
 # Create a new version
 def createVersion(versionToCreate, projectToUse):
-	print '\nCreating version...'
+  print('\nCreating version...')
 
-	url = '%s/rest/api/2/version/' % projectUrl
-	description = 'Automatically created version at %s/releases/tag/v%s' % (github, versionToCreate)
+  url = '%s/rest/api/2/version/' % projectUrl
+  description = 'Automatically created version at %s/releases/tag/v%s' % (github, versionToCreate)
 
-	s = requests.Session()
-	s.auth = (username, password)
-	s.headers.update({'Content-Type' : 'application/json'})
+  s = requests.Session()
+  s.auth = (username, password)
+  s.headers.update({'Content-Type' : 'application/json'})
 
-	newVersion = { 'archived' : 'false', \
-	 'project' : projectToUse, \
-	 'name' : versionToCreate, \
-	 'description' : description, \
-	 'released' : 'false', \
-	 'releaseDate' : datetime.datetime.utcnow().isoformat() \
-	 }
+  newVersion = { 'archived' : 'false', \
+   'project' : projectToUse, \
+   'name' : versionToCreate, \
+   'description' : description, \
+   'released' : 'false', \
+   'releaseDate' : datetime.datetime.utcnow().isoformat() \
+   }
 
-	r = s.post(url, data=json.dumps(newVersion))
-	r.raise_for_status()
+  r = s.post(url, data=json.dumps(newVersion))
+  r.raise_for_status()
 
-	if r.status_code == 201:
-		data = r.json()
-		versionUrl = data[u'self']
+  if r.status_code == 201:
+    data = r.json()
+    versionUrl = data[u'self']
 
-		print '\nVersion created in %s with name: %s.' % (projectToUse, versionToCreate)
-		print 'URL: %s' % versionUrl
-	else:
-		print '\nCould not create version.'
-		sys.exit(1)
+    print('\nVersion created in %s with name: %s.' % (projectToUse, versionToCreate))
+    print('URL: %s' % versionUrl)
+  else:
+    print('\nCould not create version.')
+    sys.exit(1)
 
 def main():
-	print '\n\n\t\t-------------------------'
-	print '\t\tJira Version Creator Tool'
-	print '\t\t-------------------------\n\n'
+  print('\n\n\t\t-------------------------')
+  print('\t\tJira Version Creator Tool')
+  print('\t\t-------------------------\n\n')
 
-	print 'Version:\t%s' % version
-	print 'Project Key:\t%s' % project
+  print('Version:\t%s' % version)
+  print('Project Key:\t%s' % project)
 
-	createVersion(version, project)
+  createVersion(version, project)
 
-	print '\nJira Version Creator completed successfully.'
+  print('\nJira Version Creator completed successfully.')
 
 if __name__ == "__main__":
-	main()
+  main()
