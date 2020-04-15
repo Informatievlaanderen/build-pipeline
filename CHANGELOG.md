@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.5...v4.0.0) (2020-04-15)
+
+
+### Bug Fixes
+
+* get rid of bb names ([74ed95f](https://github.com/Informatievlaanderen/build-pipeline/commit/74ed95ff47a42b92b0bb3264f670e668a38ed944))
+
+
+### BREAKING CHANGES
+
+* BITBUCKET_COMMIT is now GIT_COMMIT and BITBUCKET_BUILD_NUMBER is CI_BUILD_NUMBER
+
 ## [3.3.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.4...v3.3.5) (2020-04-08)
 
 
