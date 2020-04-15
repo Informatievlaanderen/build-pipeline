@@ -333,8 +333,8 @@ let pack formatNugetVersion project =
         BuildConfig = "Release"
         OutputPath = buildDir @@ "nuget"
         Version = nugetVersion
-        WorkingDir = buildDir @@ project @@ "win"
-        TemplateFile = buildDir @@ project @@ "win" @@ "paket.template"
+        WorkingDir = buildDir @@ project @@ "linux"
+        TemplateFile = buildDir @@ project @@ "linux" @@ "paket.template"
     }
   )
 
