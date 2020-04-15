@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.0...v4.0.1) (2020-04-15)
+
+
+### Bug Fixes
+
+* pack from linux ([bca8b0f](https://github.com/Informatievlaanderen/build-pipeline/commit/bca8b0f5144ffa1b6862991f96b28d3c3a3caa87))
+
 # [4.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v3.3.5...v4.0.0) (2020-04-15)
 
 
