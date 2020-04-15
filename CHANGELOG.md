@@ -1,3 +1,10 @@
+## [4.0.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.4...v4.0.5) (2020-04-15)
+
+
+### Bug Fixes
+
+* convert ci-jiraversion.py to python 3 ([2614ecf](https://github.com/Informatievlaanderen/build-pipeline/commit/2614ecf0b557dd0f38e67a147a904e922b1ce6ec))
+
 ## [4.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.3...v4.0.4) (2020-04-15)
 
 
