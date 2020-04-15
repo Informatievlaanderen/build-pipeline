@@ -15,8 +15,8 @@ open Newtonsoft.Json.Linq
 Target.initEnvironment()
 
 let currentDirectory = Directory.GetCurrentDirectory()
-let buildNumber = Environment.environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0.0.0"
-let gitHash = Environment.environVarOrDefault "BITBUCKET_COMMIT" ""
+let buildNumber = Environment.environVarOrDefault "CI_BUILD_NUMBER" "0.0.0"
+let gitHash = Environment.environVarOrDefault "GIT_COMMIT" ""
 let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 let dockerRegistry = Environment.environVarOrDefault "BUILD_DOCKER_REGISTRY" "dev.local"
 
