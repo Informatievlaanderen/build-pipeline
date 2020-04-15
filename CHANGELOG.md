@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.1...v4.0.2) (2020-04-15)
+
+
+### Bug Fixes
+
+* convert md2conf to python3 ([9b042d5](https://github.com/Informatievlaanderen/build-pipeline/commit/9b042d5964155a65eebe3344a633d3820963ebc4))
+
 ## [4.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.0...v4.0.1) (2020-04-15)
 
 
