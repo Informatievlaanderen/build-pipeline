@@ -1,3 +1,10 @@
+## [4.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.3...v4.0.4) (2020-04-15)
+
+
+### Bug Fixes
+
+* no more decode('utf-8') needed ([d86d8e3](https://github.com/Informatievlaanderen/build-pipeline/commit/d86d8e3019c1bd44c843a967bac8137760b4cb7f))
+
 ## [4.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.2...v4.0.3) (2020-04-15)
 
 
