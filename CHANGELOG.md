@@ -1,3 +1,10 @@
+## [4.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.2...v4.0.3) (2020-04-15)
+
+
+### Bug Fixes
+
+* urllib quote plus moved ([7e002a5](https://github.com/Informatievlaanderen/build-pipeline/commit/7e002a588fc0c30f028a4814b2eb1655df32d237))
+
 ## [4.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.1...v4.0.2) (2020-04-15)
 
 
