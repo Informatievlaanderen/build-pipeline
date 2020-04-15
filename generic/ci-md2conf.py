@@ -181,7 +181,7 @@ def processRefs(html):
 # Retrieve page details by title
 def getPage(title):
   print('\tRetrieving page information: %s' % title)
-  url = '%s/rest/api/content?title=%s&spaceKey=%s&expand=version,ancestors' % (wikiUrl, urllib.quote_plus(title), spacekey)
+  url = '%s/rest/api/content?title=%s&spaceKey=%s&expand=version,ancestors' % (wikiUrl, urllib.parse.quote_plus(title), spacekey)
 
   s = requests.Session()
   s.auth = (username, password)
