@@ -104,7 +104,7 @@ jobs:
       if: env.RELEASE_VERSION != 'none'
       shell: bash
       run: |
-        node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
+        node generic/ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
       env:
         LIBNAME: Be.Vlaanderen.Basisregisters.Build.Pipeline
         SEMVER: ${{ env.RELEASE_VERSION }}
@@ -114,7 +114,7 @@ jobs:
     - name: Publish to Confluence
       if: env.RELEASE_VERSION != 'none'
       shell: bash
-      run: ./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-confluence.sh
+      run: ./generic/ci-confluence.sh
       env:
         CIRCLE_PROJECT_REPONAME: ${{ env.REPOSITORY_NAME }}
         CONFLUENCE_USERNAME: ${{ secrets.VBR_CONFLUENCE_USER }}
