@@ -44,3 +44,4 @@ open ``Build-generic``
     "cmd": "./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-confluence.sh"
 }
 ```
+
