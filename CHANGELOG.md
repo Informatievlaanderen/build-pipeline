@@ -1,3 +1,10 @@
+## [4.0.10](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.9...v4.0.10) (2020-05-18)
+
+
+### Bug Fixes
+
+* set correct version number ([fa71b5c](https://github.com/Informatievlaanderen/build-pipeline/commit/fa71b5c81992f7022d37268ec77b4df1f02eb2c2))
+
 ## [4.0.9](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.8...v4.0.9) (2020-05-18)
 
 
