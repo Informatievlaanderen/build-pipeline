@@ -14,7 +14,7 @@ open Fake.DotNet
 open Fake.IO.FileSystemOperators
 
 let currentDirectory = Directory.GetCurrentDirectory()
-let buildNumber = Environment.environVarOrDefault "BITBUCKET_BUILD_NUMBER" "0.0.1"
+let buildNumber = Environment.environVarOrDefault "CI_BUILD_NUMBER" "0.0.1"
 let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 
 Target.create "Lib_Pack" (fun _ ->
