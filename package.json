@@ -1,6 +1,6 @@
 {
   "name": "build-pipeline",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "description": "Contains generic files for Basisregisters Vlaanderen pipelines.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",

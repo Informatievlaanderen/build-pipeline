@@ -1,3 +1,10 @@
+## [4.0.7](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.6...v4.0.7) (2020-05-18)
+
+
+### Bug Fixes
+
+* move to GH-actions ([98cd96e](https://github.com/Informatievlaanderen/build-pipeline/commit/98cd96eacb85d91ad5f33b21b8faabb643289339))
+
 ## [4.0.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.5...v4.0.6) (2020-04-28)
 
 
