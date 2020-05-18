@@ -1,3 +1,10 @@
+## [4.0.12](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.11...v4.0.12) (2020-05-18)
+
+
+### Bug Fixes
+
+* python 3 ([aa446c8](https://github.com/Informatievlaanderen/build-pipeline/commit/aa446c8dfb666210e6f1d9577dbe503e9e722f3b))
+
 ## [4.0.11](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.10...v4.0.11) (2020-05-18)
 
 
