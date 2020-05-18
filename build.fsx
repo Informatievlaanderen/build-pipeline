@@ -9,6 +9,7 @@ nuget Fake.IO.FileSystem //"
 open System.IO
 
 open Fake.Core
+open Fake.Core.TargetOperators
 open Fake.DotNet
 open Fake.IO.FileSystemOperators
 
@@ -25,5 +26,9 @@ Target.create "Lib_Pack" (fun _ ->
     }
   )
 )
+
+Target.create "PackageAll" ignore
+
+"Lib_Pack" ==> "PackageAll"
 
 Target.runOrDefault "Lib_Pack"
