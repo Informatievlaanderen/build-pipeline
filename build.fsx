@@ -9,7 +9,6 @@ nuget Fake.IO.FileSystem //"
 open System.IO
 
 open Fake.Core
-open Fake.Core.TargetOperators
 open Fake.DotNet
 open Fake.IO.FileSystemOperators
 
@@ -17,7 +16,7 @@ let currentDirectory = Directory.GetCurrentDirectory()
 let buildNumber = Environment.environVarOrDefault "CI_BUILD_NUMBER" "0.0.1"
 let buildDir = Environment.environVarOrDefault "BUILD_STAGINGDIRECTORY" (currentDirectory @@ "dist")
 
-Target.create "Lib_Pack" (fun _ ->
+Target.create "PackageAll" (fun _ ->
   Paket.pack(fun p ->
     { p with
         ToolType = ToolType.CreateLocalTool()
@@ -27,8 +26,4 @@ Target.create "Lib_Pack" (fun _ ->
   )
 )
 
-Target.create "PackageAll" ignore
-
-"Lib_Pack" ==> "PackageAll"
-
-Target.runOrDefault "Lib_Pack"
+Target.runOrDefault "PackageAll"

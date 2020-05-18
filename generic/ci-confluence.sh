@@ -5,6 +5,6 @@ python packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-md2conf.p
     --user "${CONFLUENCE_USERNAME}" \
     --password "${CONFLUENCE_PASSWORD}" \
     --orgname "vlaamseoverheid" \
-    --title "${CIRCLE_PROJECT_REPONAME}" \
+    --title "${CONFLUENCE_TITLE}" \
     --ancestor "Changelog" \
     --nogo

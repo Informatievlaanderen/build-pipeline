@@ -6,4 +6,4 @@ python packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-jiraversi
     --password "${CONFLUENCE_PASSWORD}" \
     --orgname "vlaamseoverheid" \
     --github "https://github.com/Informatievlaanderen" \
-    --repo "${CIRCLE_PROJECT_REPONAME}"
+    --repo "${CONFLUENCE_TITLE}"
