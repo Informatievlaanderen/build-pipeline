@@ -1,3 +1,10 @@
+## [4.0.13](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.12...v4.0.13) (2020-05-18)
+
+
+### Bug Fixes
+
+* cleanup code ([5bb7f6c](https://github.com/Informatievlaanderen/build-pipeline/commit/5bb7f6cc65954876ee4731198b1b621624eeaed7))
+
 ## [4.0.12](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.11...v4.0.12) (2020-05-18)
 
 
