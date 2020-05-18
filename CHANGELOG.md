@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.14...v4.1.0) (2020-05-18)
+
+
+### Features
+
+* fancy version number ([6c9f0ad](https://github.com/Informatievlaanderen/build-pipeline/commit/6c9f0ad390d7c0d4c31d7957cd48b15fcc725319))
+
 ## [4.0.14](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.13...v4.0.14) (2020-05-18)
 
 
