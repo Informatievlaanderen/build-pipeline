@@ -117,7 +117,11 @@
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "BITBUCKET_BUILD_NUMBER=${nextRelease.version} ./build.sh Lib_Pack"
+        "cmd": "echo ${nextRelease.version} > semver"
+      },
+      {
+        "path": "@semantic-release/exec",
+        "cmd": "CI_BUILD_NUMBER=${nextRelease.version} ./build.sh PackageAll"
       },
       {
         "path": "@semantic-release/git",
@@ -137,14 +141,6 @@
             "path": "dist/**/*.nupkg"
           }
         ]
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "node ci-nuget.js dist/Be.Vlaanderen.Basisregisters.Build.Pipeline/Be.Vlaanderen.Basisregisters.Build.Pipeline.${nextRelease.version}.nupkg"
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "./ci-confluence.sh"
       }
     ],
     "success": [

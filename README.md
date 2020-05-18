@@ -1,4 +1,4 @@
-# build-pipeline
+# build-pipeline [![Build Status](https://github.com/Informatievlaanderen/build-pipeline/workflows/CI/badge.svg)](https://github.com/Informatievlaanderen/build-pipeline/actions)
 
 ## build.sh
 
