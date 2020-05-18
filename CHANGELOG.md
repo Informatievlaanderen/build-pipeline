@@ -1,3 +1,10 @@
+## [4.0.11](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.10...v4.0.11) (2020-05-18)
+
+
+### Bug Fixes
+
+* publish to confluence ([28d16a1](https://github.com/Informatievlaanderen/build-pipeline/commit/28d16a168006a74bccbe2a4267771fa0c66031c8))
+
 ## [4.0.10](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.9...v4.0.10) (2020-05-18)
 
 
