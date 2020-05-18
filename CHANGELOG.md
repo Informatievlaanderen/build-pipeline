@@ -1,3 +1,10 @@
+## [4.0.14](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.13...v4.0.14) (2020-05-18)
+
+
+### Bug Fixes
+
+* force build ([53f25ba](https://github.com/Informatievlaanderen/build-pipeline/commit/53f25ba39ced5261a6016961ca2d0e414eceb334))
+
 ## [4.0.13](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.12...v4.0.13) (2020-05-18)
 
 
