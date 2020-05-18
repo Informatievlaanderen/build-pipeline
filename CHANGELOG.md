@@ -1,3 +1,10 @@
+## [4.0.9](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.8...v4.0.9) (2020-05-18)
+
+
+### Bug Fixes
+
+* push to nuget ([6e2909b](https://github.com/Informatievlaanderen/build-pipeline/commit/6e2909b502be4a24124bcc467ee80024908844b3))
+
 ## [4.0.8](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.7...v4.0.8) (2020-05-18)
 
 
