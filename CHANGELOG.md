@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.1.0...v4.2.0) (2020-06-08)
+
+
+### Features
+
+* add fake msil rid ([f45ec5d](https://github.com/Informatievlaanderen/build-pipeline/commit/f45ec5daea4df80e08c8211c6f5b2d71d0df43a0))
+
 # [4.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.0.14...v4.1.0) (2020-05-18)
 
 
