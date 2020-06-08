@@ -204,10 +204,18 @@ let buildNeutral formatAssemblyVersion x =
   }) x
 
   for runtimeIdentifier in supportedRuntimeIdentifiers do
+    let rid =
+      match runtimeIdentifier with
+      | "linux-x64" -> Some "linux-x64"
+      | "win-x64" -> Some "win-x64"
+      | "msil" -> None
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+
     let readyToRun =
       match runtimeIdentifier with
       | "linux-x64" -> Environment.isLinux
       | "win-x64" -> Environment.isWindows
+      | "msil" -> false
       | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
     DotNet.build (fun p ->
@@ -215,7 +223,7 @@ let buildNeutral formatAssemblyVersion x =
         Common = setCommonOptions p.Common
         Configuration = DotNet.Release
         NoRestore = true
-        Runtime = Some runtimeIdentifier
+        Runtime = rid
         MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
     }) x
 
@@ -233,16 +241,32 @@ let publish formatAssemblyVersion project =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
   for runtimeIdentifier in supportedRuntimeIdentifiers do
+    let rid =
+      match runtimeIdentifier with
+      | "linux-x64" -> Some "linux-x64"
+      | "win-x64" -> Some "win-x64"
+      | "msil" -> None
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+
     let readyToRun =
       match runtimeIdentifier with
       | "linux-x64" -> Environment.isLinux
       | "win-x64" -> Environment.isWindows
+      | "msil" -> false
       | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
     let outputDirectory =
       match runtimeIdentifier with
       | "linux-x64" -> "linux"
       | "win-x64" -> "win"
+      | "msil" -> "msil"
+      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+
+    let selfContained =
+      match runtimeIdentifier with
+      | "linux-x64" -> Some true
+      | "win-x64" -> Some true
+      | "msil" -> None
       | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
     DotNet.publish (fun p ->
@@ -251,12 +275,13 @@ let publish formatAssemblyVersion project =
         Configuration = DotNet.Release
         NoBuild = true
         NoRestore = true
-        Runtime = Some runtimeIdentifier
-        SelfContained = Some true
+        Runtime = rid
+        SelfContained = selfContained
         OutputPath = Some (buildDir @@ project @@ outputDirectory)
         MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
     }) ("src" @@ project @@ (sprintf "%s.csproj" project))
 
+// TODO: Refactor publishSolution to work with msil rid as well
 let publishSolution formatAssemblyVersion sln =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) runtimeIdentifier publishDir readyToRun =
     { msbuild with
@@ -327,16 +352,28 @@ let push dockerRepository containerName =
 
 let pack formatNugetVersion project =
   let nugetVersion = formatNugetVersion buildNumber
-  Paket.pack(fun p ->
-    { p with
-        ToolType = ToolType.CreateLocalTool()
-        BuildConfig = "Release"
-        OutputPath = buildDir @@ "nuget"
-        Version = nugetVersion
-        WorkingDir = buildDir @@ project @@ "linux"
-        TemplateFile = buildDir @@ project @@ "linux" @@ "paket.template"
-    }
-  )
+  if List.contains "msil" supportedRuntimeIdentifiers then
+    Paket.pack(fun p ->
+      { p with
+          ToolType = ToolType.CreateLocalTool()
+          BuildConfig = "Release"
+          OutputPath = buildDir @@ "nuget"
+          Version = nugetVersion
+          WorkingDir = buildDir @@ project @@ "msil"
+          TemplateFile = buildDir @@ project @@ "msil" @@ "paket.template"
+      }
+    )
+  else
+    Paket.pack(fun p ->
+      { p with
+          ToolType = ToolType.CreateLocalTool()
+          BuildConfig = "Release"
+          OutputPath = buildDir @@ "nuget"
+          Version = nugetVersion
+          WorkingDir = buildDir @@ project @@ "linux"
+          TemplateFile = buildDir @@ project @@ "linux" @@ "paket.template"
+      }
+    )
 
 let packSolution formatNugetVersion sln =
   let nugetVersion = formatNugetVersion buildNumber
