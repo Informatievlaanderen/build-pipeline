@@ -1,3 +1,13 @@
+## [4.2.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.0...v4.2.1) (2020-06-18)
+
+
+### Bug Fixes
+
+* move to 3.1.5 ([9ef61b3](https://github.com/Informatievlaanderen/build-pipeline/commit/9ef61b36893c33902e851e7b877f0d7573bf0998))
+* use main branch name ([ef2961b](https://github.com/Informatievlaanderen/build-pipeline/commit/ef2961bf433e7c17a3c5b4dc105fbc944c9b9511))
+* use main branch name ([b7762b2](https://github.com/Informatievlaanderen/build-pipeline/commit/b7762b233c0b3977cc3f1561e24bece4b579ab11))
+* use main branch name ([e8e373c](https://github.com/Informatievlaanderen/build-pipeline/commit/e8e373c901a9387ae4994d34f2fe35b2e33c6652))
+
 # [4.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.1.0...v4.2.0) (2020-06-08)
 
 
