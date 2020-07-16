@@ -10,9 +10,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
-    "@commitlint/prompt": "8.3.5",
+    "@commitlint/cli": "9.1.1",
+    "@commitlint/config-conventional": "9.1.1",
+    "@commitlint/prompt": "9.1.1",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
     "@semantic-release/exec": "5.0.0",
@@ -24,7 +24,7 @@
     "cz-conventional-changelog": "3.2.0",
     "husky": "4.2.5",
     "form-data": "3.0.0",
-    "semantic-release": "17.0.8",
+    "semantic-release": "17.1.1",
     "merge": ">=1.2.1"
   },
   "scripts": {
