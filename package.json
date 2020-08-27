@@ -21,7 +21,7 @@
     "@semantic-release/github": "7.0.7",
     "@semantic-release/release-notes-generator": "9.0.1",
     "commitizen": "4.1.2",
-    "cz-conventional-changelog": "3.2.0",
+    "cz-conventional-changelog": "3.3.0",
     "husky": "4.2.5",
     "form-data": "3.0.0",
     "semantic-release": "17.1.1",
