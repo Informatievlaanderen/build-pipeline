@@ -1,3 +1,10 @@
+## [4.2.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.2...v4.2.3) (2020-09-17)
+
+
+### Bug Fixes
+
+* upgrade to 3.1.8 ([f428d09](https://github.com/Informatievlaanderen/build-pipeline/commit/f428d0966976c1ba1a61bddcaa74662b2f3f44e3))
+
 ## [4.2.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.1...v4.2.2) (2020-07-16)
 
 
