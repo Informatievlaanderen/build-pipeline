@@ -1,3 +1,11 @@
+## [4.2.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.3...v4.2.4) (2020-11-17)
+
+
+### Bug Fixes
+
+* correct typo ([80ed5b0](https://github.com/Informatievlaanderen/build-pipeline/commit/80ed5b0d040b7e2fcfba962ac83057dfa3776962))
+* remove set-env usage in gh-actions ([ca495b4](https://github.com/Informatievlaanderen/build-pipeline/commit/ca495b463abe59d1bc07defa8df3e9650f359120))
+
 ## [4.2.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.2...v4.2.3) (2020-09-17)
 
 
