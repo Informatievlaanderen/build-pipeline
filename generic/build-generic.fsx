@@ -223,7 +223,7 @@ let buildNeutral formatAssemblyVersion x =
         Common = setCommonOptions p.Common
         Configuration = DotNet.Release
         NoRestore = true
-        Runtime = rid
+        // Runtime = rid
         MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
     }) x
 
