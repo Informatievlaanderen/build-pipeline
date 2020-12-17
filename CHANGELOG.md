@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.5...v5.0.0) (2020-12-17)
+
+
+### Features
+
+* upgrade to net5.0 ([cc6c95f](https://github.com/Informatievlaanderen/build-pipeline/commit/cc6c95f7f05e828424e1e057543219d37ffde685))
+
+
+### BREAKING CHANGES
+
+* Major .NET upgrade
+
 ## [4.2.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v4.2.4...v4.2.5) (2020-12-17)
 
 
