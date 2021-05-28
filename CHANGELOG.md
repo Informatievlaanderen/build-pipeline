@@ -1,3 +1,10 @@
+## [5.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.0.2...v5.0.3) (2021-05-28)
+
+
+### Bug Fixes
+
+* move to 5.0.6 ([a916401](https://github.com/Informatievlaanderen/build-pipeline/commit/a916401f9d6d7aeadc86b002424407e5cfb77c63))
+
 ## [5.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.0.1...v5.0.2) (2021-02-02)
 
 
