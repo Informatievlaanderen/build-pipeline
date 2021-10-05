@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.0.4...v5.1.0) (2021-10-05)
+
+
+### Features
+
+* remove clearing of fallback folder ([3a8752d](https://github.com/Informatievlaanderen/build-pipeline/commit/3a8752dec07c1fd12f6b92934aec9b5cca6dd610))
+
 ## [5.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.0.3...v5.0.4) (2021-05-31)
 
 
