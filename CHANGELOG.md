@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.1.0...v5.2.0) (2022-03-09)
+
+
+### Features
+
+* pass build_number to dockerfile as ARG ([3347feb](https://github.com/Informatievlaanderen/build-pipeline/commit/3347feb283095bc62b67aa0b08732a3e1cc7335c))
+
 # [5.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.0.4...v5.1.0) (2021-10-05)
 
 
