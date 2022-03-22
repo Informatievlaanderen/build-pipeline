@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.2.0...v6.0.0) (2022-03-22)
+
+
+### Features
+
+* move to dotnet 6.0.3 ([a927e03](https://github.com/Informatievlaanderen/build-pipeline/commit/a927e036c9d825a2d0b4de20beb8bb60fabb0375))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 6.0.3
+
 # [5.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.1.0...v5.2.0) (2022-03-09)
 
 
