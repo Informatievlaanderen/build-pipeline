@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.0...v6.0.1) (2022-03-22)
+
+
+### Bug Fixes
+
+* use dotnet6 in props files ([c0d2d79](https://github.com/Informatievlaanderen/build-pipeline/commit/c0d2d792555486d8b7b41912bcc43d58b0bc4b4e))
+
 # [6.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v5.2.0...v6.0.0) (2022-03-22)
 
 
