@@ -1,11 +1,11 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-    <RuntimeFrameworkVersion>5.0.6</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>6.0.3</RuntimeFrameworkVersion>
     <DisableImplicitFrameworkReferences>false</DisableImplicitFrameworkReferences>
 
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
