@@ -1,5 +1,5 @@
 #r "paket:
-framework: netstandard20
+framework: net6.0
 source https://api.nuget.org/v3/index.json
 nuget Fake.Core.Target
 nuget Fake.Core.Environment
