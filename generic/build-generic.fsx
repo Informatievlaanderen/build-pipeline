@@ -195,12 +195,14 @@ let buildNeutral formatAssemblyVersion x =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
+  let forceReadyToRunNeutralBuild = true
+
   DotNet.build (fun p ->
   { p with
       Common = setCommonOptions p.Common
       Configuration = DotNet.Release
-      NoRestore = true
-      MSBuildParams = (setMsBuildParams p.MSBuildParams false)
+      NoRestore = false
+      MSBuildParams = (setMsBuildParams p.MSBuildParams forceReadyToRunNeutralBuild)
   }) x
 
   for runtimeIdentifier in supportedRuntimeIdentifiers do
@@ -274,7 +276,7 @@ let publish formatAssemblyVersion project =
         Common = setCommonOptions p.Common
         Configuration = DotNet.Release
         NoBuild = true
-        NoRestore = false
+        NoRestore = true
         Runtime = rid
         SelfContained = selfContained
         OutputPath = Some (buildDir @@ project @@ outputDirectory)
