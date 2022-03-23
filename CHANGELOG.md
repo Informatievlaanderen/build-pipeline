@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.2...v6.0.3) (2022-03-23)
+
+
+### Bug Fixes
+
+* restore on neutral build with ready to run ([1783c48](https://github.com/Informatievlaanderen/build-pipeline/commit/1783c4881f5e3dd2e15fbf60606b1f56a67caea0))
+
 ## [6.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.1...v6.0.2) (2022-03-23)
 
 
