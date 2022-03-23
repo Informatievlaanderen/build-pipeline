@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.1...v6.0.2) (2022-03-23)
+
+
+### Bug Fixes
+
+* NoRestore false in DotNetPublish of build-generic.fsx ([a96f128](https://github.com/Informatievlaanderen/build-pipeline/commit/a96f128b3f03466c0c47dfe57aca504816b60666))
+
 ## [6.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.0...v6.0.1) (2022-03-22)
 
 
