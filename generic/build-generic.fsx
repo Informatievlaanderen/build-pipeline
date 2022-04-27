@@ -162,6 +162,13 @@ let addReadyToRun readyToRun args =
     ]
   merge args readyToRunArgs
 
+let addMyRuntimeIdentifier runtimeIdentifier args =
+  let runtimeIdentifierArgs =
+    match runtimeIdentifier with
+     | Some x -> ["MyRuntimeIdentifier", x]
+     | _ -> []
+  merge args runtimeIdentifierArgs
+
 let testWithDotNet path =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion }
@@ -192,8 +199,8 @@ let setSolutionVersions formatAssemblyVersion product copyright company x =
        AssemblyInfo.Company company]
 
 let buildNeutral formatAssemblyVersion x =
-  let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun =
-    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addVersionArguments (formatAssemblyVersion buildNumber) }
+  let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun runtimeIdentifier =
+    { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addMyRuntimeIdentifier runtimeIdentifier |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
   // let forceReadyToRunNeutralBuild = true
 
@@ -227,8 +234,8 @@ let buildNeutral formatAssemblyVersion x =
         Common = setCommonOptions p.Common
         Configuration = DotNet.Release
         NoRestore = noRestore
-        Runtime = rid
-        MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun)
+        //Runtime = rid
+        MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun rid)
     }) x
 
     noRestore <- true
