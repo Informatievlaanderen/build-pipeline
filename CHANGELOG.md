@@ -1,3 +1,11 @@
+## [6.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.3...v6.0.4) (2022-04-27)
+
+
+### Bug Fixes
+
+* dont do neutral build and support no restore elsewhere ([91b2b90](https://github.com/Informatievlaanderen/build-pipeline/commit/91b2b900d6950d94fb5802f087b8c1d726892e18))
+* make build solution great again ([2dc761b](https://github.com/Informatievlaanderen/build-pipeline/commit/2dc761b628f51a7c09aef19fec2d03d03b1d2db8))
+
 ## [6.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.2...v6.0.3) (2022-03-23)
 
 
