@@ -202,17 +202,15 @@ let buildNeutral formatAssemblyVersion x =
   let setMsBuildParams (msbuild: MSBuild.CliArguments) readyToRun runtimeIdentifier =
     { msbuild with Properties = List.empty |> addRuntimeFrameworkVersion |> addReadyToRun readyToRun |> addMyRuntimeIdentifier runtimeIdentifier |> addVersionArguments (formatAssemblyVersion buildNumber) }
 
-  // let forceReadyToRunNeutralBuild = true
+  let forceReadyToRunNeutralBuild = true
 
-  // DotNet.build (fun p ->
-  // { p with
-  //     Common = setCommonOptions p.Common
-  //     Configuration = DotNet.Release
-  //     NoRestore = false
-  //     MSBuildParams = (setMsBuildParams p.MSBuildParams forceReadyToRunNeutralBuild)
-  // }) x
-
-  let mutable noRestore = false
+  DotNet.build (fun p ->
+  { p with
+      Common = setCommonOptions p.Common
+      Configuration = DotNet.Release
+      NoRestore = false
+      MSBuildParams = (setMsBuildParams p.MSBuildParams forceReadyToRunNeutralBuild None)
+  }) x
 
   for runtimeIdentifier in supportedRuntimeIdentifiers do
     let rid =
@@ -222,23 +220,22 @@ let buildNeutral formatAssemblyVersion x =
       | "msil" -> None
       | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
-    let readyToRun =
-      match runtimeIdentifier with
-      | "linux-x64" -> Environment.isLinux
-      | "win-x64" -> Environment.isWindows
-      | "msil" -> false
-      | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
+    if rid <> None then
+      let readyToRun =
+        match runtimeIdentifier with
+        | "linux-x64" -> Environment.isLinux
+        | "win-x64" -> Environment.isWindows
+        | "msil" -> false
+        | _ -> failwithf "RuntimeIdentifier %s is not supported" runtimeIdentifier
 
-    DotNet.build (fun p ->
-    { p with
-        Common = setCommonOptions p.Common
-        Configuration = DotNet.Release
-        NoRestore = noRestore
-        //Runtime = rid
-        MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun rid)
-    }) x
-
-    noRestore <- true
+      DotNet.build (fun p ->
+      { p with
+          Common = setCommonOptions p.Common
+          Configuration = DotNet.Release
+          NoRestore = true
+          //Runtime = rid
+          MSBuildParams = (setMsBuildParams p.MSBuildParams readyToRun rid)
+      }) x
 
 let build formatAssemblyVersion project =
   buildNeutral formatAssemblyVersion ("src" @@ project @@ (sprintf "%s.csproj" project))
