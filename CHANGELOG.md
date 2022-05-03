@@ -1,3 +1,10 @@
+## [6.0.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.4...v6.0.5) (2022-05-03)
+
+
+### Bug Fixes
+
+* make tests work for non-msil projects ([afb7c8d](https://github.com/Informatievlaanderen/build-pipeline/commit/afb7c8d8bfc5c403ebde95e90106bd6fe45244ec))
+
 ## [6.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.3...v6.0.4) (2022-04-27)
 
 
