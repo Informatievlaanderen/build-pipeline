@@ -343,6 +343,25 @@ let containerize dockerRepository project containerName =
 
   if result2.ExitCode <> 0 then failwith "Failed result from Docker Tag"
 
+let containerizeWithCustomBuildArgs dockerRepository project containerName buildargs=
+  let args = $"build . --no-cache --tag {dockerRegistry}{dockerRepository}{containerName}:{buildNumber} --build-arg build_number={buildNumber} {buildargs}".Split [|' '|]
+  let result1 =
+    args
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withWorkingDirectory (buildDir @@ project @@ "linux")
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 10.)
+    |> Proc.run
+
+  if result1.ExitCode <> 0 then failwith "Failed result from Docker Build"
+
+  let result2 =
+    [ "tag"; sprintf "%s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber; sprintf "%s/%s/%s:latest" dockerRegistry dockerRepository containerName]
+    |> CreateProcess.fromRawCommand "docker"
+    |> CreateProcess.withTimeout (TimeSpan.FromMinutes 5.)
+    |> Proc.run
+
+  if result2.ExitCode <> 0 then failwith "Failed result from Docker Tag"
+
 let push dockerRepository containerName =
   let result1 =
     [ "push"; sprintf "%s/%s/%s:%s" dockerRegistry dockerRepository containerName buildNumber]
