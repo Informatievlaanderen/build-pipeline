@@ -106,7 +106,7 @@ jobs:
         dotnet-version: '8.x'
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
