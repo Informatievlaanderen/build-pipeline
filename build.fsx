@@ -1,6 +1,13 @@
 #r "paket:
 framework: net6.0
 source https://api.nuget.org/v3/index.json
+
+nuget Microsoft.Build 17.3.2
+nuget Microsoft.Build.Framework 17.3.2
+nuget Microsoft.Build.Tasks.Core 17.3.2
+nuget Microsoft.Build.Utilities.Core 17.3.2
+nuget FSharp.Core ~> 6.0
+
 nuget Fake.Core.Target
 nuget Fake.Core.Environment
 nuget Fake.DotNet.Paket
