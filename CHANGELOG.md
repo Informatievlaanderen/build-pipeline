@@ -1,3 +1,10 @@
+## [6.0.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.5...v6.0.6) (2022-12-09)
+
+
+### Bug Fixes
+
+* pin net6 libs ([c12ec2b](https://github.com/Informatievlaanderen/build-pipeline/commit/c12ec2b296021bbe08d607cb67b7b9eb4288ed90))
+
 ## [6.0.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.4...v6.0.5) (2022-05-03)
 
 
