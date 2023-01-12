@@ -1,0 +1,103 @@
+name: Pack
+
+on:
+  workflow_call:
+    inputs:
+      pack-file: #Be.Vlaanderen.Basisregisters.StreetNameRegistry.Api.BackOffice
+        required: true
+        type: string
+      test-project: #StreetNameRegistry.Tests
+        required: true
+        type: string
+      build-project: #StreetNameRegistry.Api.BackOffice
+        required: true
+        type: string
+      semver:
+        required: true
+        type: string
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Cache Paket
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-paket
+        with:
+          path: packages
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
+
+      - name: Paket install
+        shell: bash
+        run: dotnet paket install
+
+      - name: Paket restore
+        shell: bash
+        run: dotnet paket restore
+
+      - name: Dotnet restore tests
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }}
+
+      - name: Dotnet build tests
+        shell: bash
+        run: dotnet build --no-restore -f net6.0 test/${{ inputs.test-project }}
+
+      - name: Run all tests
+        run: dotnet test test/${{ inputs.test-project }}
+
+      - name: Dotnet restore
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }}
+
+      - name: Dotnet build
+        shell: bash
+        run: dotnet build --no-restore -f net6.0 src/${{ inputs.build-project }}
+
+      - name: Dotnet publish
+        shell: bash
+        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -p:PublishReadyToRun=false -f net6.0 src/${{ inputs.build-project }}
+
+      - name: Pack
+        shell: bash
+        run: dotnet paket pack --version $SEMVER --template dist/${{ inputs.build-project }}/msil/paket.template dist/nuget
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Upload package
+        if: inputs.semver != 'none'
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-${{ inputs.pack-file }}-${{ inputs.semver }}
+          path: dist/nuget/${{ inputs.pack-file }}.${{ inputs.semver }}.nupkg
