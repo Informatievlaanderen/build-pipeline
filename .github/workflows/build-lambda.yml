@@ -72,7 +72,7 @@ jobs:
 
       - name: Dotnet build tests
         shell: bash
-        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained -f net6.0 test/${{ inputs.test-project }}
+        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained test/${{ inputs.test-project }}
 
       - name: Run all tests
         run: dotnet test test/${{ inputs.test-project }}
@@ -83,11 +83,11 @@ jobs:
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained -f net6.0 src/${{ inputs.build-project }}
+        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained src/${{ inputs.build-project }}
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime 'linux-x64' -p:PublishReadyToRun=true --self-contained -f net6.0 src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime 'linux-x64' -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
 
       - name: Package Lambda functions
         if: env.RELEASE_VERSION != 'none'
