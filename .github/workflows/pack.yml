@@ -80,10 +80,16 @@ jobs:
       - name: Dotnet restore
         shell: bash
         run: dotnet restore src/${{ inputs.build-project }}
+        
+      - name: Set Assembly Versions
+        shell: bash
+        run: CI_BUILD_NUMBER=$SEMVER ./build.sh SetAssemblyVersions
+        env:          
+          SEMVER: ${{ inputs.semver }}
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-restore src/${{ inputs.build-project }}
+        run: dotnet build --no-restore src/${{ inputs.build-project }}      
 
       - name: Dotnet publish
         shell: bash
