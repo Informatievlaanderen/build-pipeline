@@ -1,3 +1,10 @@
+## [6.0.7](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.6...v6.0.7) (2023-01-13)
+
+
+### Bug Fixes
+
+* test setassemblyversions ([f43a840](https://github.com/Informatievlaanderen/build-pipeline/commit/f43a8406f1dc4697d4a6cb6cd703f3cb4674397d))
+
 ## [6.0.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.5...v6.0.6) (2022-12-09)
 
 
