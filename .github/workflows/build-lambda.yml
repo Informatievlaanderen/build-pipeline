@@ -75,7 +75,7 @@ jobs:
         run: dotnet build --no-restore --runtime 'linux-x64' --self-contained test/${{ inputs.test-project }}
 
       - name: Run all tests
-        run: dotnet test test/${{ inputs.test-project }}
+        run: dotnet test test/${{ inputs.test-project }} --no-build
 
       - name: Dotnet restore
         shell: bash
