@@ -1,3 +1,10 @@
+## [6.0.8](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.7...v6.0.8) (2023-08-01)
+
+
+### Bug Fixes
+
+* exclude common files being published when referencing other projects ([44d927e](https://github.com/Informatievlaanderen/build-pipeline/commit/44d927e41a0cd397933bf0356d7eed822badbdd8))
+
 ## [6.0.7](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.6...v6.0.7) (2023-01-13)
 
 
