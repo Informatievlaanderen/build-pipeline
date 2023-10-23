@@ -1,3 +1,10 @@
+## [6.2.7](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.6...v6.2.7) (2023-10-23)
+
+
+### Bug Fixes
+
+* lowercase did not merge properly ([54476e5](https://github.com/Informatievlaanderen/build-pipeline/commit/54476e512d76bec050eaad95637ec61887d26f16))
+
 ## [6.2.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.5...v6.2.6) (2023-10-23)
 
 
