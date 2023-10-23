@@ -1,0 +1,14 @@
+name: cache-pip
+description: Cache pip
+
+runs:
+  using: 'composite'
+  steps:
+
+  - name: Cache pip
+    uses: actions/cache@v3
+    env:
+      cache-name: cache-pip
+    with:
+      path: ~/.cache/pip
+      key: ${{ runner.os }}-build-${{ env.cache-name }}

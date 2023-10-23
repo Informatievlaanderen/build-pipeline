@@ -1,0 +1,31 @@
+name: setup-dotnet
+description: Setup .NET Core
+
+inputs:
+  version:
+    description: 'Required dotnet version'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+
+  - name: Cache Paket
+    uses: ./.github/actions/cache-paket
+
+  - name: Setup .NET Core
+    uses: actions/setup-dotnet@v3
+    with:
+      dotnet-version: ${{ inputs.version }}
+
+  - name: .NET version
+    shell: bash
+    run: dotnet --info
+
+  - name: Restore dotnet tools
+    shell: bash
+    run: dotnet tool restore
+
+  - name: Paket restore
+    shell: bash
+    run: dotnet paket restore
