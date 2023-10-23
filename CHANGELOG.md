@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.8...v6.1.0) (2023-10-23)
+
+
+### Features
+
+* add reusable actions for npm, dotnet, and python ([f93d231](https://github.com/Informatievlaanderen/build-pipeline/commit/f93d23119ecfa8d65ed7b54d2bfb015d9154fa91))
+
 ## [6.0.8](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.7...v6.0.8) (2023-08-01)
 
 
