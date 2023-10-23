@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.0...v6.2.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* reference full url in actions and workflows ([886655a](https://github.com/Informatievlaanderen/build-pipeline/commit/886655ac46a4df723f5d22b00a8ace5b2aa13716))
+
 # [6.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.1.0...v6.2.0) (2023-10-23)
 
 
