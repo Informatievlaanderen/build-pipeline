@@ -6,7 +6,7 @@ runs:
   steps:
 
   - name: Cache NPM
-    uses: informatievlaanderen/build-pipeline/.github/actions/cache-npm
+    uses: informatievlaanderen/build-pipeline/.github/actions/cache-npm@main
 
   - name: Setup Node.js
     uses: actions/setup-node@v3
