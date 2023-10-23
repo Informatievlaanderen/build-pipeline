@@ -1,3 +1,10 @@
+## [6.2.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.5...v6.2.6) (2023-10-23)
+
+
+### Bug Fixes
+
+* remove output from workflow in favour of environment variables ([6ec349b](https://github.com/Informatievlaanderen/build-pipeline/commit/6ec349b9fc96c3724876343b860ee0101a2272aa))
+
 ## [6.2.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.4...v6.2.5) (2023-10-23)
 
 
