@@ -8,8 +8,6 @@ jobs:
     if: github.repository_owner == 'Informatievlaanderen'
     name: Decide next version
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -33,9 +31,9 @@ jobs:
 
       - name: Set Release Version
         id: set-version
+        env:
+          RELEASE_VERSION: ${{ semver }
         run: |
           [ ! -f semver ] && echo none > semver
           echo $(cat semver)
-          echo ::set-output name=version::$(cat semver)
-          echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
         shell: bash
