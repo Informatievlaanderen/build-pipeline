@@ -11,7 +11,7 @@ runs:
   steps:
 
   - name: Cache Paket
-    uses: informatievlaanderen/build-pipeline/.github/actions/cache-paket
+    uses: informatievlaanderen/build-pipeline/.github/actions/cache-paket@main
 
   - name: Setup .NET Core
     uses: actions/setup-dotnet@v3
