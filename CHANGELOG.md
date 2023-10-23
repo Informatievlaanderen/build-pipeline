@@ -1,3 +1,10 @@
+## [6.2.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.1...v6.2.2) (2023-10-23)
+
+
+### Bug Fixes
+
+* update incorrect reference path ([#240](https://github.com/Informatievlaanderen/build-pipeline/issues/240)) ([7d3bf70](https://github.com/Informatievlaanderen/build-pipeline/commit/7d3bf706457fc9e9afeb3bd1e19b579a028bd7eb))
+
 ## [6.2.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.0...v6.2.1) (2023-10-23)
 
 
