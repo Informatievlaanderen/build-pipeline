@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup NodeJS
-        uses: Informatievlaanderen/build-pipeline/.github/actions/setup-nodejs@main
+        uses: informatievlaanderen/build-pipeline/.github/actions/setup-nodejs@main
 
       - name: Run Semantic Release dry-run
         shell: bash
