@@ -1,3 +1,10 @@
+## [6.2.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.4...v6.2.5) (2023-10-23)
+
+
+### Bug Fixes
+
+* added main branch to the action references ([f651c0a](https://github.com/Informatievlaanderen/build-pipeline/commit/f651c0ab086a59a650df578d44d8e1311510efa2))
+
 ## [6.2.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.3...v6.2.4) (2023-10-23)
 
 
