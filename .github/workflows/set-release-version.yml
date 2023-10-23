@@ -1,5 +1,4 @@
 name: Set Release Version
-
 on:
   workflow_call:
 
@@ -15,8 +14,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: ./.github/actions/setup-nodejs
+      - name: Setup NodeJS
+        uses: Informatievlaanderen/build-pipeline/.github/actions/setup-nodejs
 
       - name: Run Semantic Release dry-run
         shell: bash
@@ -40,4 +39,3 @@ jobs:
           echo ::set-output name=version::$(cat semver)
           echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
         shell: bash
-

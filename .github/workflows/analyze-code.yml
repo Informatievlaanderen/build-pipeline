@@ -21,7 +21,7 @@ jobs:
         shell: bash
 
       - name: Setup .NET Core
-        uses: ./.github/actions/setup-dotnet
+        uses: Informatievlaanderen/build-pipeline/.github/actions/setup-dotnet@main
         with:
           version: ${{ secrets.VBR_DOTNET_VERSION }}
 
