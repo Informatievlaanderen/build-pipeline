@@ -1,3 +1,17 @@
+# [6.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.1.0...v6.2.0) (2023-10-23)
+
+
+### Bug Fixes
+
+* cleanup for analyze-code and set-release-version ([c036c8f](https://github.com/Informatievlaanderen/build-pipeline/commit/c036c8f7378f7998b7ec9b1175b12600b2daee2a))
+* remove unused environment variable ([78b5688](https://github.com/Informatievlaanderen/build-pipeline/commit/78b5688a2df6e9986932ff7ed37b66ef2e925f65))
+* updated name for analyze-code workflow ([32a953e](https://github.com/Informatievlaanderen/build-pipeline/commit/32a953e345fc6b28d826c608d1bf9f5a8687a691))
+
+
+### Features
+
+* Added workflow for set-release-version and analyze-code ([909570e](https://github.com/Informatievlaanderen/build-pipeline/commit/909570e5492eb8151edf42eb6fc6003dc5eb2e1f))
+
 # [6.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.0.8...v6.1.0) (2023-10-23)
 
 
