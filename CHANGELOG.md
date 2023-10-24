@@ -1,3 +1,10 @@
+## [6.2.8](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.7...v6.2.8) (2023-10-24)
+
+
+### Bug Fixes
+
+* use release version instead of output variables ([#247](https://github.com/Informatievlaanderen/build-pipeline/issues/247)) ([c9faf78](https://github.com/Informatievlaanderen/build-pipeline/commit/c9faf78d8fa857e05e5d0ac6aeb488951464b387))
+
 ## [6.2.7](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.6...v6.2.7) (2023-10-23)
 
 
