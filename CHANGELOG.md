@@ -1,3 +1,10 @@
+## [6.2.9](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.8...v6.2.9) (2023-10-24)
+
+
+### Bug Fixes
+
+* rollback on set-output-version ([#248](https://github.com/Informatievlaanderen/build-pipeline/issues/248)) ([1f5cfd8](https://github.com/Informatievlaanderen/build-pipeline/commit/1f5cfd893ca2db166f572c83abf430f5770c5282))
+
 ## [6.2.8](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.7...v6.2.8) (2023-10-24)
 
 
