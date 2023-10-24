@@ -29,11 +29,17 @@ jobs:
           GIT_AUTHOR_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
           GIT_COMMITTER_EMAIL: ${{ secrets.VBR_GIT_EMAIL }}
 
-      - name: Set Release Version
-        id: set-version
+      - name: Check Release Version
+        id: set-semver
         env:
-          RELEASE_VERSION: ${{ semver }
+          RELEASE_VERSION: ${{ semver }}
         run: |
           [ ! -f semver ] && echo none > semver
           echo $(cat semver)
         shell: bash
+
+      - name: Set Release Version
+        id: set-version
+        env:
+          RELEASE_VERSION: ${{ semver }}
+        run: echo "Release version setter in environment variable RELEASE_VERSION"
