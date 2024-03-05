@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.0...v7.0.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* try upload nuget again + bump npm packages ([d9a5178](https://github.com/Informatievlaanderen/build-pipeline/commit/d9a5178060d4cf0534b21f6c57bd7179478651f0))
+
 # [7.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.9...v7.0.0) (2024-03-05)
 
 
