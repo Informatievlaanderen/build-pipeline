@@ -83,12 +83,6 @@ jobs:
       - name: Dotnet restore
         shell: bash
         run: dotnet restore src/${{ inputs.build-project }}
-        
-      - name: Set Assembly Versions
-        shell: bash
-        run: CI_BUILD_NUMBER=$SEMVER ./build.sh SetAssemblyVersions
-        env:          
-          SEMVER: ${{ inputs.semver }}
 
       - name: Dotnet build
         shell: bash
@@ -96,7 +90,13 @@ jobs:
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -p:PublishReadyToRun=false src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -p:PublishReadyToRun=false src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright=$COPYRIGHT -p:Company=$COMPANY -p:InformationalVersion=$GIT_HASH
+        env:
+          VERSION: ${{ inputs.semver }}
+          COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+          PRODUCT: "Basisregisters Vlaanderen"
+          COMPANY: "Vlaamse overheid"
+          GIT_HASH: ${{ github.sha }}
 
       - name: Pack
         shell: bash
