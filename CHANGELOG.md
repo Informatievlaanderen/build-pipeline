@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.9...v7.0.0) (2024-03-05)
+
+
+### Features
+
+* add new buildprops + bump dotnet8 ([ef61a5c](https://github.com/Informatievlaanderen/build-pipeline/commit/ef61a5c78c5bab847bb0ff5b5c7b44897bf41aca))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 8.0.2 + removed FAKE build scripts
+
 ## [6.2.9](https://github.com/Informatievlaanderen/build-pipeline/compare/v6.2.8...v6.2.9) (2023-10-24)
 
 
