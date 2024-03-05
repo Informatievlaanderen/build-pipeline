@@ -143,5 +143,8 @@
       "@semantic-release/github"
     ],
     "fail": false
+  },
+  "engines" : {
+    "node" : ">=20"
   }
 }
