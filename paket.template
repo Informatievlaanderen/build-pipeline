@@ -14,20 +14,7 @@ licenseUrl https://opensource.org/licenses/MIT
 
 description Contains generic files for Basisregisters Vlaanderen pipelines.
 
-dependencies
-  framework: netstandard20
-    Newtonsoft.Json >= LOCKEDVERSION
-    Fake.Core.Environment >= LOCKEDVERSION
-    Fake.Core.Process >= LOCKEDVERSION
-    Fake.Core.Target >= LOCKEDVERSION
-    Fake.DotNet.AssemblyInfoFile >= LOCKEDVERSION
-    Fake.DotNet.Cli >= LOCKEDVERSION
-    Fake.DotNet.Paket >= LOCKEDVERSION
-    Fake.IO.FileSystem >= LOCKEDVERSION
-    Fake.JavaScript.Npm >= LOCKEDVERSION
-
 files
-  generic\build-generic.fsx => Content
   generic\ci-myget.js => Content
   generic\ci-nuget.js => Content
   generic\ci-md2conf.py => Content
@@ -36,7 +23,7 @@ files
   generic\ci-docker-login.sh => Content
   generic\ci-jira.sh => Content
   generic\ci-jiraversion.py => Content
-  generic\build.sh => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props => Content
+  generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.NetStandard.props => Content
   generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props => Content

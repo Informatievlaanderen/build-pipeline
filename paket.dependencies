@@ -1,18 +1,2 @@
-framework: net6.0
+framework: netstandard2.1
 source https://api.nuget.org/v3/index.json
-
-nuget Newtonsoft.Json 13.0.1
-
-nuget Fake.Core.Environment
-nuget Fake.Core.Process
-nuget Fake.Core.Target
-nuget Fake.DotNet.AssemblyInfoFile
-nuget Fake.DotNet.Cli
-nuget Fake.DotNet.Paket
-nuget Fake.IO.FileSystem
-nuget Fake.JavaScript.Npm
-
-nuget Microsoft.Build 17.3.2
-nuget Microsoft.Build.Framework 17.3.2
-nuget Microsoft.Build.Tasks.Core 17.3.2
-nuget Microsoft.Build.Utilities.Core 17.3.2
