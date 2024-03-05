@@ -128,6 +128,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests markdown argparse
 
+    - name: Restore dotnet tools
+      shell: bash
+      run: |
+        dotnet tool restore
+
+    - name: Paket install
+      shell: bash
+      run: dotnet paket install
+
     - name: Pack
       shell: bash
       run: dotnet paket pack --version $SEMVER --template paket.template dist/Be.Vlaanderen.Basisregisters.Build.Pipeline
@@ -154,18 +163,18 @@ jobs:
       shell: bash
 
     - name: Publish to NuGet
-      if: env.RELEASE_VERSION != 'none'
+      if: needs.set-release-version.outputs.version != 'none'
       shell: bash
       run: |
         node ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
       env:
         LIBNAME: Be.Vlaanderen.Basisregisters.Build.Pipeline
-        SEMVER: ${{ env.RELEASE_VERSION }}
+        SEMVER: ${{ needs.set-release-version.outputs.version }}
         NUGET_HOST: ${{ secrets.NUGET_HOST }}
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
     - name: Publish to Confluence
-      if: env.RELEASE_VERSION != 'none'
+      if: needs.set-release-version.outputs.version != 'none'
       shell: bash
       run: ./ci-confluence.sh
       env:
