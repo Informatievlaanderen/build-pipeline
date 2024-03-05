@@ -167,14 +167,13 @@ jobs:
       shell: bash
 
     - name: Publish to NuGet
-      if: needs.set-release-version.outputs.version != 'none'
       shell: bash
       run: |
-        node ci-nuget.js dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg
+        dotnet nuget push dist/$LIBNAME/$LIBNAME.$SEMVER.nupkg --source nuget.org --api-key $NUGET_API_KEY
       env:
         LIBNAME: Be.Vlaanderen.Basisregisters.Build.Pipeline
         SEMVER: ${{ needs.set-release-version.outputs.version }}
-        NUGET_HOST: ${{ secrets.NUGET_HOST }}
+        WORKSPACE: ${{ github.workspace }}
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
     - name: Publish to Confluence
