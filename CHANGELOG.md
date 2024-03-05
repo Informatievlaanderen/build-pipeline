@@ -1,3 +1,10 @@
+## [7.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.1...v7.0.2) (2024-03-05)
+
+
+### Bug Fixes
+
+* use dotnet nuget ([cd7f3f3](https://github.com/Informatievlaanderen/build-pipeline/commit/cd7f3f34cd29a78bbee53c871215430bc5293087))
+
 ## [7.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.0...v7.0.1) (2024-03-05)
 
 
