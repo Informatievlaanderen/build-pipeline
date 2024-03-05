@@ -1,3 +1,10 @@
+## [7.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.2...v7.0.3) (2024-03-05)
+
+
+### Bug Fixes
+
+* remove disabling version generation ([e0b255b](https://github.com/Informatievlaanderen/build-pipeline/commit/e0b255bf2b16f186cc42a2f559f0a39cbcf6281a))
+
 ## [7.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.1...v7.0.2) (2024-03-05)
 
 
