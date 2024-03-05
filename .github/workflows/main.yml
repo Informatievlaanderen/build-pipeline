@@ -114,6 +114,10 @@ jobs:
       shell: bash
       run: node --version
 
+    - name: Install NPM dependencies
+      shell: bash
+      run: npm ci
+
     - name: .NET version
       shell: bash
       run: dotnet --info
