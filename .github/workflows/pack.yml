@@ -96,7 +96,7 @@ jobs:
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -p:PublishReadyToRun=false src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -c Release -p:PublishReadyToRun=false src/${{ inputs.build-project }}
 
       - name: Pack
         shell: bash
