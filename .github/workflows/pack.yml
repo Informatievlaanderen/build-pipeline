@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       test-project: #StreetNameRegistry.Tests
-        required: true
+        required: false
         type: string
       build-project: #StreetNameRegistry.Api.BackOffice
         required: true
@@ -70,14 +70,17 @@ jobs:
         run: dotnet paket restore
 
       - name: Dotnet restore tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
         run: dotnet restore test/${{ inputs.test-project }}
 
       - name: Dotnet build tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
         run: dotnet build --no-restore test/${{ inputs.test-project }}
 
       - name: Run all tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         run: dotnet test test/${{ inputs.test-project }} --no-build
 
       - name: Dotnet restore
