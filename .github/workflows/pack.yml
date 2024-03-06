@@ -86,7 +86,7 @@ jobs:
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-incremental --no-restore src/${{ inputs.build-project }}  -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+        run: dotnet build --no-incremental --no-restore -c Release src/${{ inputs.build-project }}  -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
         env:
           VERSION: ${{ inputs.semver }}
           COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
