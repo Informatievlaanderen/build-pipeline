@@ -1,3 +1,10 @@
+## [7.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.3...v7.0.4) (2024-03-06)
+
+
+### Bug Fixes
+
+* be able to skip tests for pack ([1d6ca26](https://github.com/Informatievlaanderen/build-pipeline/commit/1d6ca263d8cc00982cd5d5c07a1ce402a8b2dd3c))
+
 ## [7.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.2...v7.0.3) (2024-03-05)
 
 
