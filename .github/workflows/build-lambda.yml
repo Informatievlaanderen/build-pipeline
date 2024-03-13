@@ -15,6 +15,12 @@ on:
       semver:
         required: true
         type: string
+      runtime:
+        required: false
+        type: string
+      dotnet-version:
+        required: false
+        type: string
 
 jobs:
   build-lambda:
@@ -47,7 +53,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
+          dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
 
       - name: .NET version
         shell: bash
@@ -68,26 +74,36 @@ jobs:
 
       - name: Dotnet restore tests
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }} --runtime linux-x64
+        run: dotnet restore test/${{ inputs.test-project }} --runtime $RUNTIME
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet build tests
         shell: bash
-        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained test/${{ inputs.test-project }}
+        run: dotnet build --no-restore --runtime $RUNTIME --self-contained test/${{ inputs.test-project }}
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Run all tests
         run: dotnet test test/${{ inputs.test-project }}
 
       - name: Dotnet restore
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }} --runtime linux-x64
+        run: dotnet restore src/${{ inputs.build-project }} --runtime $RUNTIME
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-restore --runtime 'linux-x64' --self-contained src/${{ inputs.build-project }}
+        run: dotnet build --no-restore --runtime $RUNTIME --self-contained src/${{ inputs.build-project }}
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime 'linux-x64' -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime $RUNTIME -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Package Lambda functions
         if: env.RELEASE_VERSION != 'none'
