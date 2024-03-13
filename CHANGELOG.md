@@ -1,3 +1,10 @@
+# [7.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.4...v7.1.0) (2024-03-13)
+
+
+### Features
+
+* change build-image and build-lambda to be more generic ([aa2d137](https://github.com/Informatievlaanderen/build-pipeline/commit/aa2d1378505f500ca67e0b274c2859547ed97cd7))
+
 ## [7.0.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.3...v7.0.4) (2024-03-06)
 
 
