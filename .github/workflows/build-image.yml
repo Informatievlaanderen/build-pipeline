@@ -116,7 +116,7 @@ jobs:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Containerize
-        if: ${{ inputs.test-project != '' && inputs.runtime == 'linux-x64' }}
+        #if: ${{ inputs.runtime == '' || inputs.runtime == 'none' || inputs.runtime == 'linux-x64' }}
         shell: bash
         run: docker build . --no-cache --tag $TAG --build-arg BUILD_NUMBER=$SEMVER
         working-directory: dist/${{ inputs.build-project }}/linux
@@ -124,14 +124,14 @@ jobs:
           TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
           SEMVER: ${{ inputs.semver }}
           
-      - name: Containerize ARM64
-        if: ${{ inputs.test-project != '' && inputs.runtime == 'linux-arm64' }}
-        shell: bash
-        run: docker build . --no-cache --tag $TAG --build-arg BUILD_NUMBER=$SEMVER --platform=linux/arm64
-        working-directory: dist/${{ inputs.build-project }}/linux
-        env:
-          TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
-          SEMVER: ${{ inputs.semver }}
+      #- name: Containerize ARM64
+      #  if: ${{ inputs.runtime != '' && inputs.runtime == 'linux-arm64' }}
+      #  shell: bash
+      #  run: docker build . --no-cache --tag $TAG --build-arg BUILD_NUMBER=$SEMVER --platform=linux/arm64
+      #  working-directory: dist/${{ inputs.build-project }}/linux
+      #  env:
+      #    TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
+      #    SEMVER: ${{ inputs.semver }}
 
       - name: Show images
         shell: bash
