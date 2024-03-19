@@ -1,3 +1,5 @@
+# [7.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.1.0...v7.2.0) (2024-03-19)
+
 # [7.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.4...v7.1.0) (2024-03-13)
 
 
