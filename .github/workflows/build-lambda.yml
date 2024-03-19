@@ -98,13 +98,13 @@ jobs:
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-restore --runtime $RUNTIME --self-contained src/${{ inputs.build-project }}
+        run: dotnet build --no-restore --runtime $RUNTIME -c Release --self-contained src/${{ inputs.build-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime $RUNTIME -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore -c Release --runtime $RUNTIME -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
