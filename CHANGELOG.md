@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.0...v7.2.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* build lambda in release config ([894efa5](https://github.com/Informatievlaanderen/build-pipeline/commit/894efa534af46bad4a47170849c22df0811f9117))
+
 # [7.2.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.1.0...v7.2.0) (2024-03-19)
 
 # [7.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.0.4...v7.1.0) (2024-03-13)
