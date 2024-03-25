@@ -1,3 +1,10 @@
+## [7.2.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.1...v7.2.2) (2024-03-25)
+
+
+### Bug Fixes
+
+* **ci:** remove `self-contained` for lamba ([033d94d](https://github.com/Informatievlaanderen/build-pipeline/commit/033d94d31e9ef25ae281c88a84a79564b73a950e))
+
 ## [7.2.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.0...v7.2.1) (2024-03-19)
 
 
