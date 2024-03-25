@@ -104,7 +104,7 @@ jobs:
 
       - name: Dotnet publish
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore -c Release --runtime $RUNTIME -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
+        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore -c Release --runtime $RUNTIME -p:PublishReadyToRun=true src/${{ inputs.build-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
