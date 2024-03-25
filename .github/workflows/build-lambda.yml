@@ -82,7 +82,7 @@ jobs:
       - name: Dotnet build tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet build --no-restore --runtime $RUNTIME --self-contained test/${{ inputs.test-project }}
+        run: dotnet build --no-restore --runtime $RUNTIME test/${{ inputs.test-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
