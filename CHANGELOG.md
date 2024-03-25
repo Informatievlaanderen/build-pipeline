@@ -1,3 +1,10 @@
+## [7.2.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.2...v7.2.3) (2024-03-25)
+
+
+### Bug Fixes
+
+* **ci:** remove self-contained for build lambda ([47c8086](https://github.com/Informatievlaanderen/build-pipeline/commit/47c808618488c061096065c421fe087be1561005))
+
 ## [7.2.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.1...v7.2.2) (2024-03-25)
 
 
