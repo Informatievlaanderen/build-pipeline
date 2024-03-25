@@ -98,7 +98,7 @@ jobs:
 
       - name: Dotnet build
         shell: bash
-        run: dotnet build --no-restore --runtime $RUNTIME -c Release --self-contained src/${{ inputs.build-project }}
+        run: dotnet build --no-restore --runtime $RUNTIME -c Release src/${{ inputs.build-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
