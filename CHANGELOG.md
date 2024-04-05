@@ -1,3 +1,10 @@
+## [7.2.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.4...v7.2.5) (2024-04-05)
+
+
+### Bug Fixes
+
+* remove default items from library.props ([07bc1db](https://github.com/Informatievlaanderen/build-pipeline/commit/07bc1dbd18e35c614d9dca8195699d38fe1062f7))
+
 ## [7.2.4](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.3...v7.2.4) (2024-03-25)
 
 
