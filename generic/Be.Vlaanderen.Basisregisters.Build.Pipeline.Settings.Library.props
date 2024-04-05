@@ -23,15 +23,7 @@
     <Nullable>enable</Nullable>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="init.sh;appsettings.json;appsettings.*.json;Dockerfile"/>
-    <None Include="init.sh;appsettings.json;appsettings.*.json;Dockerfile">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
+  </PropertyGroup> 
 
   <PropertyGroup>
     <!-- Disable Paket restore under NCrunch build -->
