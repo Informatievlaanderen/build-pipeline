@@ -1,3 +1,10 @@
+## [7.2.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.5...v7.2.6) (2024-04-15)
+
+
+### Bug Fixes
+
+* lambda remove datadog from zips ([3eb4a90](https://github.com/Informatievlaanderen/build-pipeline/commit/3eb4a903d923d40b3cf65a366a3fe4f42a8724e8))
+
 ## [7.2.5](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.4...v7.2.5) (2024-04-05)
 
 
