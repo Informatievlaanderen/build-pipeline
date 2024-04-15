@@ -114,6 +114,8 @@ jobs:
         run: |
           echo Zip lambda functions
           pushd dist/${{ inputs.build-project }}/linux
+          echo cleanup datadog
+          rm -rf datadog
           echo zip -r lambda.zip .
           zip -r lambda.zip .
           popd
