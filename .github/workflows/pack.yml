@@ -77,7 +77,10 @@ jobs:
 
       - name: Run all tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
-        run: dotnet test test/${{ inputs.test-project }} --no-build
+        shell: bash
+        run: |
+          ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+          dotnet test test/${{ inputs.test-project }} --no-build
 
       - name: Dotnet restore
         shell: bash
