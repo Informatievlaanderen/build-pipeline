@@ -97,10 +97,15 @@ jobs:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet build
-        shell: bash
-        run: dotnet build --no-restore --runtime $RUNTIME -c Release src/${{ inputs.build-project }}
+        shell: bash        
+        run: dotnet build --no-restore -c Release --runtime $RUNTIME src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+          VERSION: ${{ inputs.semver }}
+          COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+          PRODUCT: "Basisregisters Vlaanderen"
+          COMPANY: "Vlaamse overheid"
+          GIT_HASH: ${{ github.sha }}
 
       - name: Dotnet publish
         shell: bash
