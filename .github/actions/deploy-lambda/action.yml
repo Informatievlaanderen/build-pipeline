@@ -1,0 +1,67 @@
+name: "Deploy Lambda"
+description: "Trigger and monitor Lambda deployment."
+inputs:
+  function-name:
+    description: "Name of the Lambda function to deploy."
+    required: true
+  deploy-url:
+    description: "Base URL for promoting Lambda deployments."
+    required: true
+  access-key-id:
+    description: "AWS Access Key ID."
+    required: true
+  secret-access-key-id:
+    description: "AWS Secret Access Key."
+    required: true
+  region:
+    description: "AWS region for the Lambda deployment."
+    required: true
+  version:
+    description: "Semantic version to deploy."
+    required: true
+  environment:
+    description: "Environment to deploy to."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Trigger deployment
+      id: trigger
+      shell: bash
+      run: |
+        RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X POST -d '{ "deploy_target": "lambda", "version": "'${{ inputs.version }}'" }' ${{ inputs.deploy-url }}/${{ inputs.function-name }}/${{ inputs.environment }}/deploy/v4/)
+        echo "$RESPONSE"
+        BUILD_UUID=$(echo "$RESPONSE" | jq -r '.body.BuildUuid')
+        if [[ -z "$BUILD_UUID" || "$BUILD_UUID" == "null" ]]; then
+          echo "Failed to retrieve BuildUuid. Response: $RESPONSE"
+          exit 1
+        fi
+        echo "build_uuid=$BUILD_UUID" >> $GITHUB_OUTPUT
+    - name: Poll deployment status
+      id: poll
+      shell: bash
+      run: |
+        STATUS_URL="${{ inputs.deploy-url }}/${{ inputs.function-name }}/${{ inputs.environment }}/deploy/v4/status/${{ steps.trigger.outputs.build_uuid }}"
+        ATTEMPT=0
+        MAX_ATTEMPTS=100
+        SLEEP_DURATION=10
+        while [[ $ATTEMPT -lt $MAX_ATTEMPTS ]]; do
+          STATUS_RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X GET $STATUS_URL)
+          STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.body.Status')
+          STATUS_CODE=$(echo "$STATUS_RESPONSE" | jq -r '.statusCode')
+          if [[ "$STATUS_CODE" -ne 200 ]]; then
+            echo "Received non-200 status code: $STATUS_CODE. Exiting polling."
+            exit 1
+          fi
+          if [[ "$STATUS" == "Succeeded" ]]; then
+            echo "Deployment succeeded with status: $STATUS"
+            break
+          elif [[ "$STATUS" == "Failed" ]]; then
+            echo "Deployment failed with status: $STATUS. Response: $STATUS_RESPONSE"
+            exit 1
+          fi
+          echo "Status is '$STATUS'. Retrying in $SLEEP_DURATION seconds..."
+          sleep $SLEEP_DURATION
+          ATTEMPT=$((ATTEMPT + 1))
+        done
