@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Be.Vlaanderen.Basisregisters.Build.Pipeline</PackageId>
+    <Version>1.0.0</Version>
+    <Title>Be.Vlaanderen.Basisregisters.Build.Pipeline</Title>
+    <Authors>Basisregisters Vlaanderen</Authors>
+    <Owners>Digitaal Vlaanderen &lt;https://www.vlaanderen.be/digitaal-vlaanderen&gt;</Owners>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/Informatievlaanderen/build-pipeline</PackageProjectUrl>
+    <Description>Contains generic files for Basisregisters Vlaanderen pipelines.</Description>
+    <Copyright>Copyright (c) Digitaal Vlaanderen</Copyright>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Content files -->
+    <None Include="generic\ci-myget.js" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-nuget.js" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-md2conf.py" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-confluence.sh" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-bitbucket.sh" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-docker-login.sh" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-jira.sh" Pack="true" PackagePath="content" />
+    <None Include="generic\ci-jiraversion.py" Pack="true" PackagePath="content" />
+    <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props" Pack="true" PackagePath="content" />
+    <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props" Pack="true" PackagePath="content" />
+    <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.NetStandard.props" Pack="true" PackagePath="content" />
+    <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props" Pack="true" PackagePath="content" />
+  </ItemGroup>
+</Project>
