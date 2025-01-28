@@ -6,6 +6,9 @@ on:
       registry:
         required: true
         type: string
+      prerestore-script:
+        required: false
+        type: string
 
 jobs:
   analyze-code:
@@ -61,6 +64,11 @@ jobs:
         shell: bash
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"Informatievlaanderen_${{ inputs.registry }}" /o:"informatievlaanderen" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
+
+      - name: Pre-restore
+        if: ${{ inputs.prerestore-script != '' && inputs.prerestore-script != 'none' }}
+        shell: bash
+        run: ${{ inputs.prerestore-script }}
 
       - name: Dotnet restore
         shell: bash
