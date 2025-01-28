@@ -1,0 +1,113 @@
+name: Pack
+
+on:
+  workflow_call:
+    inputs:
+      pack-file: #Be.Vlaanderen.Basisregisters.StreetNameRegistry.Api.BackOffice
+        required: true
+        type: string
+      test-project: #StreetNameRegistry.Tests
+        required: false
+        type: string
+      build-project: #StreetNameRegistry.Api.BackOffice
+        required: true
+        type: string
+      semver:
+        required: true
+        type: string
+      dotnet-version:
+        required: false
+        type: string
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache Nuget
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-nuget
+        with:
+          path: packages
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup Nuget
+        uses: nuget/setup-nuget@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
+
+      - name: Dotnet restore tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }}
+
+      - name: Dotnet build tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        shell: bash
+        run: dotnet build --no-restore test/${{ inputs.test-project }}
+
+      - name: Run all tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        shell: bash
+        run: |
+          ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
+          dotnet test test/${{ inputs.test-project }} --no-build
+
+      - name: Dotnet restore
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }}
+
+      - name: Dotnet build
+        shell: bash
+        run: dotnet build --no-incremental --no-restore -c Release src/${{ inputs.build-project }}  -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+        env:
+          VERSION: ${{ inputs.semver }}
+          COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+          PRODUCT: "Basisregisters Vlaanderen"
+          COMPANY: "Vlaamse overheid"
+          GIT_HASH: ${{ github.sha }}
+
+      - name: Dotnet publish
+        shell: bash
+        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -c Release -p:PublishReadyToRun=false src/${{ inputs.build-project }}
+
+      - name: Pack
+        shell: bash
+        run: nuget pack dist/${{ inputs.build-project }}/msil/package.nuspec -Version $SEMVER -OutputDirectory dist/nuget
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Upload package
+        if: inputs.semver != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-${{ inputs.pack-file }}-${{ inputs.semver }}
+          path: dist/nuget/${{ inputs.pack-file }}.${{ inputs.semver }}.nupkg
