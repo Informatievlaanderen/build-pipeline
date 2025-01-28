@@ -1,30 +1,8 @@
 # build-pipeline [![Build Status](https://github.com/Informatievlaanderen/build-pipeline/workflows/CI/badge.svg)](https://github.com/Informatievlaanderen/build-pipeline/actions)
 
-## build.sh
+## Build actions
 
-```bash
-#!/usr/bin/env bash
-set -e
-
-dotnet tool restore
-dotnet paket restore
-
-if [ $# -eq 0 ]
-then
-  FAKE_ALLOW_NO_DEPENDENCIES=true dotnet fake build
-else
-  FAKE_ALLOW_NO_DEPENDENCIES=true dotnet fake build -t "$@"
-fi
-```
-
-## build.fsx
-
-```bash
-#load "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/build-generic.fsx"
-
-open Fake
-open ``Build-generic``
-```
+to-do
 
 ## package.json
 

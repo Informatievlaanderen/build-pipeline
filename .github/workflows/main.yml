@@ -78,16 +78,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
 
-    - name: Cache Paket
-      uses: actions/cache@v4
-      env:
-        cache-name: cache-paket
-      with:
-        path: packages
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-
     - name: Cache Python
       uses: actions/cache@v4
       env:
@@ -100,10 +90,13 @@ jobs:
       run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
       shell: bash
 
+    - name: Setup Nuget
+      uses: nuget/setup-nuget@v2
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.x'
+        dotnet-version: '9.x'
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -132,18 +125,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests markdown argparse
 
-    - name: Restore dotnet tools
-      shell: bash
-      run: |
-        dotnet tool restore
-
-    - name: Paket install
-      shell: bash
-      run: dotnet paket install
-
     - name: Pack
       shell: bash
-      run: dotnet paket pack --version $SEMVER --template paket.template dist/Be.Vlaanderen.Basisregisters.Build.Pipeline
+      run: nuget pack package.nuspec -Version $SEMVER -OutputDirectory dist/Be.Vlaanderen.Basisregisters.Build.Pipeline
       env:
         SEMVER: ${{ needs.set-release-version.outputs.version }}
 
