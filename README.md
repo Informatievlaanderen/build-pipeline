@@ -4,6 +4,19 @@
 
 to-do
 
+## Scripts
+
+### pre-restore.sh
+
+To install this package (`Be.Vlaanderen.Basisregisters.Build.Pipeline`) inside your repo before calling `dotnet restore`.
+
+Example to install version 7.0.3
+```shell
+#!/bin/bash
+
+bash <(curl -s https://raw.githubusercontent.com/Informatievlaanderen/build-pipeline/refs/heads/main/scripts/pre-restore.sh) 7.0.3
+```
+
 ## package.json
 
 ```json
