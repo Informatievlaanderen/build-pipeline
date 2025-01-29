@@ -124,7 +124,7 @@ jobs:
 
     - name: Pack
       shell: bash
-      run: dotnet pack --output dist/Be.Vlaanderen.Basisregisters.Build.Pipeline --no-build --no-restore -p:PackageVersion=$SEMVER
+      run: dotnet pack --output dist/Be.Vlaanderen.Basisregisters.Build.Pipeline -p:PackageVersion=$SEMVER
       env:
         SEMVER: ${{ needs.set-release-version.outputs.version }}
 
