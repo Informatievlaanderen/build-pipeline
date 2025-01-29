@@ -44,6 +44,8 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
 
       - name: .NET version
         shell: bash
@@ -62,7 +64,7 @@ jobs:
       - name: Dotnet restore tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }}
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
 
       - name: Dotnet build tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
@@ -78,7 +80,7 @@ jobs:
 
       - name: Dotnet restore
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }}
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
 
       - name: Dotnet build
         shell: bash
