@@ -1,3 +1,11 @@
+# [7.3.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.6...v7.3.0) (2025-01-29)
+
+
+### Features
+
+* add pack with nuget action ([758518c](https://github.com/Informatievlaanderen/build-pipeline/commit/758518cf305691138eaa0352325b8e3de5374733))
+* add v2 github actions ([f5c7c84](https://github.com/Informatievlaanderen/build-pipeline/commit/f5c7c84e789cdfa0a412ff6c221a24fcc190f2ee))
+
 ## [7.2.6](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.2.5...v7.2.6) (2024-04-15)
 
 
