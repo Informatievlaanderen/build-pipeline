@@ -91,14 +91,10 @@ jobs:
           PRODUCT: "Basisregisters Vlaanderen"
           COMPANY: "Vlaamse overheid"
           GIT_HASH: ${{ github.sha }}
-
-      - name: Dotnet publish
-        shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/msil --no-build --no-restore -c Release -p:PublishReadyToRun=false src/${{ inputs.build-project }}
-
+          
       - name: Pack
         shell: bash
-        run: dotnet pack --output dist/nuget --no-build --no-restore -p:PackageVersion=$SEMVER
+        run: dotnet pack src/${{ inputs.build-project }} --output dist/nuget --no-build --no-restore -c Release -p:PackageVersion=$SEMVER -p:PublishReadyToRun=false
         env:
           SEMVER: ${{ inputs.semver }}
 
