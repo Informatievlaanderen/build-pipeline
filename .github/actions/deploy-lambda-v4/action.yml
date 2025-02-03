@@ -47,7 +47,7 @@ runs:
         MAX_ATTEMPTS=100
         SLEEP_DURATION=10
         while [[ $ATTEMPT -lt $MAX_ATTEMPTS ]]; do
-          STATUS_RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X GET $STATUS_URL)
+          STATUS_RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X POST $STATUS_URL)
           STATUS_CODE=$(echo "$STATUS_RESPONSE" | awk 'NR==1{print $2}')
           STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.message')
           if [[ "$STATUS_CODE" -ne 200 ]]; then
