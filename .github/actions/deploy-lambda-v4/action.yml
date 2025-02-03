@@ -32,7 +32,7 @@ runs:
       run: |
         RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X POST -d '{ "deploy_target": "lambda", "version": {"lambda": "${{ inputs.version }}"} }' ${{ inputs.deploy-url }}/${{ inputs.function-name }}/${{ inputs.environment }}/deploy/v4/)
         echo "$RESPONSE"
-        BUILD_UUID=$(echo "$RESPONSE" | jq -r '.body.BuildUuid')
+        BUILD_UUID=$(echo "$RESPONSE" | jq -r '.BuildUuid')
         if [[ -z "$BUILD_UUID" || "$BUILD_UUID" == "null" ]]; then
           echo "Failed to retrieve BuildUuid. Response: $RESPONSE"
           exit 1
@@ -48,10 +48,11 @@ runs:
         SLEEP_DURATION=10
         while [[ $ATTEMPT -lt $MAX_ATTEMPTS ]]; do
           STATUS_RESPONSE=$(docker run --rm okigan/awscurl --service execute-api --access_key ${{ inputs.access-key-id }} --secret_key ${{ inputs.secret-access-key-id }} --region ${{ inputs.region }} -X GET $STATUS_URL)
-          STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.body.Status')
-          STATUS_CODE=$(echo "$STATUS_RESPONSE" | jq -r '.statusCode')
+          STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.message')          
+          STATUS_CODE=$(echo "$STATUS_RESPONSE" | grep HTTP | awk '{print $2}')
           if [[ "$STATUS_CODE" -ne 200 ]]; then
             echo "Received non-200 status code: $STATUS_CODE. Exiting polling."
+            echo $STATUS_RESPONSE        
             exit 1
           fi
           if [[ "$STATUS" == "Succeeded" ]]; then
