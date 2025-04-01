@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.0...v8.0.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* add argument for build dir in scripts ([210551d](https://github.com/Informatievlaanderen/build-pipeline/commit/210551d8cdcb0616e0337944ca26b755a99dfe1a))
+
 # [8.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v7.3.1...v8.0.0) (2025-04-01)
 
 
