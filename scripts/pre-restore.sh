@@ -2,14 +2,14 @@
 
 if [ -z "$1" ]; then
   echo "Error: Version is not provided."
-  echo "Usage: $0 <version>"
+  echo "Usage: $0 <version> [output_directory]"
   exit 1
 fi
 
 PACKAGE_NAME="Be.Vlaanderen.Basisregisters.Build.Pipeline"
 PACKAGE_VERSION="$1"
 NUGET_SOURCE="https://www.nuget.org/api/v2/package"
-OUTPUT_DIR="./packages"
+OUTPUT_DIR="${2:-./build}"
 TEMP_DIR="./temp-nuget"
 
 # download
