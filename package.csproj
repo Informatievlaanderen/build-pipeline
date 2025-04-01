@@ -23,6 +23,7 @@
     <None Include="generic\ci-docker-login.sh" Pack="true" PackagePath="content" />
     <None Include="generic\ci-jira.sh" Pack="true" PackagePath="content" />
     <None Include="generic\ci-jiraversion.py" Pack="true" PackagePath="content" />
+    <None Include="logo.png" Pack="true" PackagePath="content" />
     <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props" Pack="true" PackagePath="content" />
     <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props" Pack="true" PackagePath="content" />
     <None Include="generic\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.NetStandard.props" Pack="true" PackagePath="content" />
