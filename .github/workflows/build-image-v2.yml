@@ -73,7 +73,7 @@ jobs:
       - name: Dotnet restore tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }} --locked-mode --runtime $RUNTIME
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
@@ -93,7 +93,7 @@ jobs:
 
       - name: Dotnet restore
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }} --locked-mode --runtime $RUNTIME
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
