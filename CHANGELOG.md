@@ -1,3 +1,10 @@
+## [8.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.1...v8.0.2) (2025-04-09)
+
+
+### Bug Fixes
+
+* build-image-v2 restore ([b67bdc3](https://github.com/Informatievlaanderen/build-pipeline/commit/b67bdc30d81d91f8acc3fb11871984bc934f9451))
+
 ## [8.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.0...v8.0.1) (2025-04-01)
 
 
