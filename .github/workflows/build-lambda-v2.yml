@@ -3,7 +3,13 @@ name: Build lambda
 on:
   workflow_call:
     inputs:
-      lambda-name: #lambda-backoffice
+      registry:
+        required: true
+        type: string
+      image-file: #sr-api-backoffice.tar
+        required: true
+        type: string
+      image-name: #lambda-backoffice
         required: true
         type: string
       test-project: #StreetNameRegistry.Tests
@@ -67,7 +73,7 @@ jobs:
       - name: Dotnet restore tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }} --locked-mode --runtime $RUNTIME
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
@@ -84,66 +90,42 @@ jobs:
 
       - name: Dotnet restore
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }} --locked-mode --runtime $RUNTIME
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
-      - name: Dotnet build
-        shell: bash        
-        run: dotnet build --no-restore -c Release --runtime $RUNTIME src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
-          VERSION: ${{ inputs.semver }}
-          COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
-          PRODUCT: "Basisregisters Vlaanderen"
-          COMPANY: "Vlaamse overheid"
-          GIT_HASH: ${{ github.sha }}
-
-      - name: Dotnet publish
+      - name: Package lambda
+        if: inputs.semver != 'none'
         shell: bash
-        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore -c Release --runtime $RUNTIME -p:PublishReadyToRun=true src/${{ inputs.build-project }}
+        run: cd src/${{ inputs.build-project }} && dotnet lambda package --region ${{ secrets.VBR_AWS_REGION }} -c Release --image-tag $TAG
         env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+          TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
 
-      - name: Package Lambda functions
-        if: env.RELEASE_VERSION != 'none'
+    #   - name: Dotnet build
+    #     shell: bash
+    #     run: dotnet build --no-restore -c Release --runtime $RUNTIME src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+    #     env:
+    #       RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+    #       VERSION: ${{ inputs.semver }}
+    #       COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+    #       PRODUCT: "Basisregisters Vlaanderen"
+    #       COMPANY: "Vlaamse overheid"
+    #       GIT_HASH: ${{ github.sha }}
+
+      - name: Show images
         shell: bash
-        run: |
-          echo Zip lambda functions
-          pushd dist/${{ inputs.build-project }}/linux
-          echo cleanup datadog
-          rm -rf datadog
-          echo zip -r lambda.zip .
-          zip -r lambda.zip .
-          popd
+        run: docker images
 
-      - name: Upload Lambda
+      - name: Save Image
+        if: inputs.semver != 'none'
+        shell: bash
+        run: docker image save ${{ inputs.registry }}/${{ inputs.image-name }}:$SEMVER -o ~/${{ inputs.image-file}}
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Upload image
         if: inputs.semver != 'none'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.lambda-name }}-${{ inputs.semver }}
-          path: dist/${{ inputs.build-project }}/linux/lambda.zip
-
-      # - name: Shows logs ACM container
-      #   if: ${{ failure() }}
-      #   shell: bash
-      #   run: |
-      #     docker logs acm
-
-      # - name: Shows logs elasticsearch container
-      #   if: ${{ failure() }}
-      #   shell: bash
-      #   run: |
-      #     docker logs elasticsearch
-
-      # - name: Shows logs db container
-      #   if: ${{ failure() }}
-      #   shell: bash
-      #   run: |
-      #     docker logs db
-
-      # - name: Shows logs minio container
-      #   if: ${{ failure() }}
-      #   shell: bash
-      #   run: |
-      #     docker logs minio
+          name: ${{ inputs.image-name }}-${{ inputs.semver }}
+          path: ~/${{ inputs.image-file }}
