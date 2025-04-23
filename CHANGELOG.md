@@ -1,3 +1,10 @@
+## [8.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.2...v8.0.3) (2025-04-23)
+
+
+### Bug Fixes
+
+* correct workflow lambda-v2 ([7276642](https://github.com/Informatievlaanderen/build-pipeline/commit/7276642eb88c44203e2325932e2e89a7e4d30b58))
+
 ## [8.0.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.1...v8.0.2) (2025-04-09)
 
 
