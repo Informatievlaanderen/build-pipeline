@@ -1,0 +1,122 @@
+name: Build lambda (arm64)
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        required: true
+        type: string
+      image-file: #sr-api-backoffice.tar
+        required: true
+        type: string
+      image-name: #lambda-backoffice
+        required: true
+        type: string
+      test-project: #StreetNameRegistry.Tests
+        required: false
+        type: string
+      build-project: #StreetNameRegistry.Api.BackOffice.Handlers.Lambda
+        required: true
+        type: string
+      semver:
+        required: true
+        type: string
+      dotnet-version:
+        required: false
+        type: string
+      prerestore-script:
+        required: false
+        type: string
+
+jobs:
+  build-lambda:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Pre-restore
+        if: ${{ inputs.prerestore-script != '' && inputs.prerestore-script != 'none' }}
+        shell: bash
+        run: ${{ inputs.prerestore-script }}
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
+
+      - name: Dotnet restore tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
+
+      - name: Dotnet build tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        shell: bash
+        run: dotnet build --no-restore test/${{ inputs.test-project }}
+
+      - name: Run all tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        run: dotnet test test/${{ inputs.test-project }}
+
+      - name: Dotnet restore
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
+
+      - name: Package lambda
+        if: inputs.semver != 'none'
+        shell: bash
+        run: cd src/${{ inputs.build-project }} && dotnet lambda package --region ${{ secrets.VBR_AWS_REGION }} -c Release --function-architecture arm64 --image-tag $TAG
+        env:
+          TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
+
+    #   - name: Dotnet build
+    #     shell: bash
+    #     run: dotnet build --no-restore -c Release --runtime $RUNTIME src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+    #     env:
+    #       RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+    #       VERSION: ${{ inputs.semver }}
+    #       COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+    #       PRODUCT: "Basisregisters Vlaanderen"
+    #       COMPANY: "Vlaamse overheid"
+    #       GIT_HASH: ${{ github.sha }}
+
+      - name: Show images
+        shell: bash
+        run: docker images
+
+      - name: Save Image
+        if: inputs.semver != 'none'
+        shell: bash
+        run: docker image save ${{ inputs.registry }}/${{ inputs.image-name }}:$SEMVER -o ~/${{ inputs.image-file}}
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Upload image
+        if: inputs.semver != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.image-name }}-${{ inputs.semver }}
+          path: ~/${{ inputs.image-file }}
