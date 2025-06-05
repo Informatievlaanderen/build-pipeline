@@ -1,0 +1,52 @@
+name: Deploy Service
+
+on:
+  workflow_call:
+    inputs:
+      service-name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      deploy-target:
+        required: false
+        type: string
+        default: 'ecs'
+      application:
+        required: false
+        type: string
+        default: 'ecs'
+
+jobs:
+  deploy_service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: CD services
+        env:
+            BUILD_URL: ${{ vars.VBR_AWS_API_DEVOPS_V4 }}/basisregisters/basisregisters/${{github.event.inputs.service-name}}/tst/deploy/v4
+            STATUS_URL: ${{ vars.VBR_AWS_API_DEVOPS_V4 }}/basisregisters/basisregisters/${{github.event.inputs.service-name}}/tst/deploy/v4/status
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4
+        with:
+            environment: ${{ github.event.inputs.environment }}
+            version: ${{ github.event.inputs.version }}
+            status-url: $STATUS_URL
+            deploy-url: $BUILD_URL
+            access-key: ${{ secrets.VBR_AWS_ACCESS_KEY_ID_DEVOPS }}
+            secret-key: ${{ secrets.VBR_AWS_SECRET_ACCESS_KEY_DEVOPS }}
+            interval: 2
+            deploy-target: ${{ (github.event.inputs.deploy-target == '' || github.event.inputs.deploy-target == 'none') && 'ecs' || github.event.inputs.deploy-target }}
+            application: ${{ (github.event.inputs.application == '' || github.event.inputs.application == 'none') && 'ecs' || github.event.inputs.application }}
+            domain: 'basisregisters'
+            project: 'basisregisters'
+
+      - name: output CD services
+        shell: bash
+        run: |
+            echo build-uuid: ${{ steps.awscurl-polling-action.outputs.build-uuid }}
+            echo Status: ${{ steps.awscurl-polling-action.outputs.status }}
+            echo ${{ steps.awscurl-polling-action.outputs.final-message }}
