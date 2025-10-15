@@ -79,9 +79,13 @@ jobs:
           dotnet tool restore
 
       - name: Dotnet restore tests
-        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && inputs.use-packages-lock }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
+      - name: Dotnet restore tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && !inputs.use-packages-lock }}
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }}
 
       - name: Dotnet build tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
@@ -96,8 +100,13 @@ jobs:
           dotnet test test/${{ inputs.test-project }} --no-build
 
       - name: Dotnet restore
+        if: ${{ inputs.use-packages-lock }}
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
+      - name: Dotnet restore
+        if: ${{ !inputs.use-packages-lock }}
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }}
 
       - name: Dotnet build
         shell: bash
