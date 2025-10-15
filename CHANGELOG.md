@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.3...v8.1.0) (2025-10-15)
+
+
+### Features
+
+* add input parameter `use-packages-lock` ([0eb5678](https://github.com/Informatievlaanderen/build-pipeline/commit/0eb5678e4dd5b50f6bb68749d72bf3cf1f3f6c8b))
+
 ## [8.0.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.2...v8.0.3) (2025-04-23)
 
 
