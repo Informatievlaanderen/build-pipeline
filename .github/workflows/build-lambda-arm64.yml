@@ -27,6 +27,10 @@ on:
       prerestore-script:
         required: false
         type: string
+      use-packages-lock:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build-lambda:
@@ -47,15 +51,28 @@ jobs:
         shell: bash
 
       - name: Setup .NET Core
+        if: ${{ inputs.use-packages-lock }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
           cache: true
           cache-dependency-path: "**/packages.lock.json"
+      - name: Setup .NET Core
+        if: ${{ !inputs.use-packages-lock }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
 
       - name: .NET version
         shell: bash
         run: dotnet --info
+
+      - uses: actions/cache@v4
+        if: ${{ !inputs.use-packages-lock }}
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*') }}-${{ hashFiles('Directory.Packages.props') || 'nohash' }}
+          restore-keys: ${{ runner.os }}-nuget
 
       - name: Pre-restore
         if: ${{ inputs.prerestore-script != '' && inputs.prerestore-script != 'none' }}
@@ -70,7 +87,7 @@ jobs:
       - name: Dotnet restore tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
+        run: dotnet restore test/${{ inputs.test-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
 
       - name: Dotnet build tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
@@ -83,7 +100,7 @@ jobs:
 
       - name: Dotnet restore
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
+        run: dotnet restore src/${{ inputs.build-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
 
       - name: Package lambda
         if: inputs.semver != 'none'
