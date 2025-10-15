@@ -1,3 +1,10 @@
+## [8.1.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.0...v8.1.1) (2025-10-15)
+
+
+### Bug Fixes
+
+* use condition for steps that use use-packages-lock ([313c6a4](https://github.com/Informatievlaanderen/build-pipeline/commit/313c6a45e616c7206f8531ad4589b2bafb85440b))
+
 # [8.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.0.3...v8.1.0) (2025-10-15)
 
 
