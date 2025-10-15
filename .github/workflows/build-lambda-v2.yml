@@ -88,9 +88,15 @@ jobs:
           dotnet tool restore
 
       - name: Dotnet restore tests
-        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && inputs.use-packages-lock }}
         shell: bash
-        run: dotnet restore test/${{ inputs.test-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
+        run: dotnet restore test/${{ inputs.test-project }} --locked-mode
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+      - name: Dotnet restore tests
+        if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && !inputs.use-packages-lock }}
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
@@ -106,8 +112,15 @@ jobs:
         run: dotnet test test/${{ inputs.test-project }}
 
       - name: Dotnet restore
+        if: ${{ inputs.use-packages-lock }}
         shell: bash
-        run: dotnet restore src/${{ inputs.build-project }}${{ inputs.use-packages-lock && " --locked-mode" || "" }}
+        run: dotnet restore src/${{ inputs.build-project }} --locked-mode
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+      - name: Dotnet restore
+        if: ${{ !inputs.use-packages-lock }}
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }}
         env:
           RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
