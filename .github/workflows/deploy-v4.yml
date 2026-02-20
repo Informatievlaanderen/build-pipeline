@@ -44,8 +44,8 @@ jobs:
         with:
             environment: ${{ inputs.environment }}
             version: ${{ inputs.version }}
-            status-url: ${{ vars.VBR_AWS_BUILD_STATUS_API_DEVOPS_V4 }}/${{ inputs.domain }}/${{ inputs.project }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4/status
-            deploy-url: ${{ vars.VBR_AWS_BUILD_API_DEVOPS_V4 }}/${{ inputs.domain }}/${{ inputs.project }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4
+            status-url: ${{ vars.VBR_AWS_BUILD_STATUS_API_DEVOPS_V4 }}/${{ inputs.project }}/${{ inputs.domain }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4/status
+            deploy-url: ${{ vars.VBR_AWS_BUILD_API_DEVOPS_V4 }}/${{ inputs.project }}/${{ inputs.domain }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4
             access-key: ${{ secrets.VBR_AWS_ACCESS_KEY_ID_DEVOPS }}
             secret-key: ${{ secrets.VBR_AWS_SECRET_ACCESS_KEY_DEVOPS }}
             interval: 2
