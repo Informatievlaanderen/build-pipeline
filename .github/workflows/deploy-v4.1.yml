@@ -1,0 +1,60 @@
+name: Deploy Service
+description: ECS service or task deployment
+
+on:
+  workflow_call:
+    inputs:
+      service-name:
+        description: "Name of the service or sched. task to deploy."
+        required: true
+        type: string
+      version:
+        description: "Semantic version to deploy."
+        required: true
+        type: string
+      environment:
+        description: "Environment to deploy to."
+        required: true
+        type: string
+      deploy-target:
+        description: "Deployment target (e.g., 'ecs', 'lambda')."
+        required: false
+        default: 'ecs'
+        type: string
+      application:
+        description: "Application name for the deployment."
+        required: false
+        default: 'ecs'
+        type: string
+      domain:
+        description: "Domain name for the deployment."
+        required: true
+        type: string
+      project:
+        description: "Project name for the deployment."
+        required: true
+        type: string
+      use-subfolder:
+        description: "Use subfolder for deployment."
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Deploy"
+        uses: informatievlaanderen/awscurl-polling-action/polling-action@deploy-v4-role
+        with:
+            environment: ${{ inputs.environment }}
+            version: ${{ inputs.version }}
+            status-url: ${{ vars.VBR_AWS_BUILD_STATUS_API_DEVOPS_V4 }}/${{ inputs.project }}/${{ inputs.domain }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4/status
+            deploy-url: ${{ vars.VBR_AWS_BUILD_API_DEVOPS_V4 }}/${{ inputs.project }}/${{ inputs.domain }}/${{ inputs.service-name }}/${{ inputs.environment }}/deploy/v4
+            role-arn: ${{ secrets.VBR_AWS_CICD_ROLE }}
+            interval: 2
+            deploy-target: ${{ (inputs.deploy-target == '' || inputs.deploy-target == 'none') && 'ecs' || inputs.deploy-target }}
+            application: ${{ (inputs.application == '' || inputs.application == 'none') && 'ecs' || inputs.application }}
+            domain: ${{ inputs.domain }}
+            project: ${{ inputs.project }}
+            use-subfolder: ${{ inputs.use-subfolder }}
