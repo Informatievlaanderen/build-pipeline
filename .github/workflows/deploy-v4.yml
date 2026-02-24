@@ -34,11 +34,6 @@ on:
         description: "Project name for the deployment."
         required: true
         type: string
-      use-subfolder:
-        description: "Use subfolder for deployment."
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   deploy:
