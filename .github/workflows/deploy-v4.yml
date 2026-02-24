@@ -53,4 +53,3 @@ jobs:
             application: ${{ (inputs.application == '' || inputs.application == 'none') && 'ecs' || inputs.application }}
             domain: ${{ inputs.domain }}
             project: ${{ inputs.project }}
-            use-subfolder: ${{ inputs.use-subfolder }}
