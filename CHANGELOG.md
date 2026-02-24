@@ -1,3 +1,15 @@
+## [8.1.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.2...v8.1.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* revert deploy v4 to older version and see v4.1 for newer ([7e1186a](https://github.com/Informatievlaanderen/build-pipeline/commit/7e1186abb1a83552aee0ae115e5e129377acbe96))
+
+
+### Reverts
+
+* Revert "fix: add 'use-subfolder' option to deploy workflow" ([b9c28ec](https://github.com/Informatievlaanderen/build-pipeline/commit/b9c28ec3315b4a024a5d43722c7fc19646e2e9da))
+
 ## [8.1.2](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.1...v8.1.2) (2026-02-20)
 
 
