@@ -1,3 +1,15 @@
+# [9.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.3...v9.0.0) (2026-05-29)
+
+
+### Features
+
+* upgrade to dotnet 10 ([b97ba2d](https://github.com/Informatievlaanderen/build-pipeline/commit/b97ba2d00ed40fc13baa8a5829f546a30a29f68e))
+
+
+### BREAKING CHANGES
+
+* upgrade .props files to dotnet 10
+
 ## [8.1.3](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.2...v8.1.3) (2026-02-24)
 
 
