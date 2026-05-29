@@ -156,12 +156,3 @@ jobs:
         SEMVER: ${{ needs.set-release-version.outputs.version }}
         WORKSPACE: ${{ github.workspace }}
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-
-    - name: Publish to Confluence
-      if: needs.set-release-version.outputs.version != 'none'
-      shell: bash
-      run: ./ci-confluence.sh
-      env:
-        CONFLUENCE_TITLE: ${{ env.REPOSITORY_NAME }}
-        CONFLUENCE_USERNAME: ${{ secrets.VBR_CONFLUENCE_USER }}
-        CONFLUENCE_PASSWORD: ${{ secrets.VBR_CONFLUENCE_PASSWORD }}
