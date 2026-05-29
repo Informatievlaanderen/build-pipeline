@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v9.0.0...v9.0.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* props dotnet 10 ([9f5a04f](https://github.com/Informatievlaanderen/build-pipeline/commit/9f5a04fd2274c2e588509d97aa8afc0ac3561214))
+
 # [9.0.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v8.1.3...v9.0.0) (2026-05-29)
 
 
