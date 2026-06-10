@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/Informatievlaanderen/build-pipeline/compare/v9.0.1...v9.1.0) (2026-06-10)
+
+
+### Features
+
+* update actions for workflows ([cb3ef19](https://github.com/Informatievlaanderen/build-pipeline/commit/cb3ef198406c4c28f086edc68fe36153d737a6d2))
+
 ## [9.0.1](https://github.com/Informatievlaanderen/build-pipeline/compare/v9.0.0...v9.0.1) (2026-05-29)
 
 
