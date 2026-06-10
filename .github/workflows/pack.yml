@@ -31,10 +31,10 @@ jobs:
           SEMVER: ${{ inputs.semver }}
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache Paket
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: cache-paket
         with:
@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
 
@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload package
         if: inputs.semver != 'none'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-${{ inputs.pack-file }}-${{ inputs.semver }}
           path: dist/nuget/${{ inputs.pack-file }}.${{ inputs.semver }}.nupkg

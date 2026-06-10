@@ -14,7 +14,7 @@ runs:
     uses: informatievlaanderen/build-pipeline/.github/actions/cache-paket@main
 
   - name: Setup .NET Core
-    uses: actions/setup-dotnet@v3
+    uses: actions/setup-dotnet@v5
     with:
       dotnet-version: ${{ inputs.version }}
 

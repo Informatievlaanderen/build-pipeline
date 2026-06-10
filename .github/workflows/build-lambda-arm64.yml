@@ -44,7 +44,7 @@ jobs:
           SEMVER: ${{ inputs.semver }}
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Parse repository name
         run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
@@ -52,14 +52,14 @@ jobs:
 
       - name: Setup .NET Core
         if: ${{ inputs.use-packages-lock }}
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
           cache: true
           cache-dependency-path: "**/packages.lock.json"
       - name: Setup .NET Core
         if: ${{ !inputs.use-packages-lock }}
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ inputs.dotnet-version || secrets.VBR_DOTNET_VERSION }}
 
@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: dotnet --info
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: ${{ !inputs.use-packages-lock }}
         with:
           path: ~/.nuget/packages
@@ -136,7 +136,7 @@ jobs:
 
       - name: Upload image
         if: inputs.semver != 'none'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.image-name }}-${{ inputs.semver }}
           path: ~/${{ inputs.image-file }}

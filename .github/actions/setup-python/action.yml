@@ -9,7 +9,7 @@ runs:
     uses: informatievlaanderen/build-pipeline/.github/actions/cache-pip@main
 
   - name: Set up Python
-    uses: actions/setup-python@v3
+    uses: actions/setup-python@v6
     with:
       python-version: '3.x'
 

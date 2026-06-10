@@ -1,4 +1,7 @@
-name: Build lambda
+name: Build lambda (arm64)
+
+permissions:
+  id-token: write
 
 on:
   workflow_call:
@@ -21,9 +24,6 @@ on:
       semver:
         required: true
         type: string
-      runtime:
-        required: false
-        type: string
       dotnet-version:
         required: false
         type: string
@@ -37,7 +37,7 @@ on:
 
 jobs:
   build-lambda:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Check version
@@ -91,21 +91,15 @@ jobs:
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && inputs.use-packages-lock }}
         shell: bash
         run: dotnet restore test/${{ inputs.test-project }} --locked-mode
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
       - name: Dotnet restore tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' && !inputs.use-packages-lock }}
         shell: bash
         run: dotnet restore test/${{ inputs.test-project }}
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
 
       - name: Dotnet build tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
         shell: bash
-        run: dotnet build --no-restore --runtime $RUNTIME test/${{ inputs.test-project }}
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+        run: dotnet build --no-restore test/${{ inputs.test-project }}
 
       - name: Run all tests
         if: ${{ inputs.test-project != '' && inputs.test-project != 'none' }}
@@ -115,19 +109,21 @@ jobs:
         if: ${{ inputs.use-packages-lock }}
         shell: bash
         run: dotnet restore src/${{ inputs.build-project }} --locked-mode
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
       - name: Dotnet restore
         if: ${{ !inputs.use-packages-lock }}
         shell: bash
         run: dotnet restore src/${{ inputs.build-project }}
-        env:
-          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.VBR_AWS_CICD_ROLE }}
+          aws-region: ${{ secrets.VBR_AWS_REGION_PRD }}
 
       - name: Package lambda
         if: inputs.semver != 'none'
         shell: bash
-        run: cd src/${{ inputs.build-project }} && dotnet lambda package --region ${{ secrets.VBR_AWS_REGION }} -c Release --image-tag $TAG -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+        run: cd src/${{ inputs.build-project }} && dotnet lambda package --region ${{ secrets.VBR_AWS_REGION }} -c Release --function-architecture arm64 --image-tag $TAG -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
         env:
           TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
           VERSION: ${{ inputs.semver }}
