@@ -12,7 +12,7 @@ jobs:
       version: ${{ steps.set-version.outputs.version }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup NodeJS
         uses: informatievlaanderen/build-pipeline/.github/actions/setup-nodejs@main
